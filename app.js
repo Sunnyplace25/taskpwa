@@ -1881,6 +1881,15 @@ function init() {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) bgmPause();
   });
+
+  // バージョン表示タップで強制リロード（SW再登録 → 最新取得）
+  document.getElementById('versionBtn')?.addEventListener('click', async () => {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    location.reload(true);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', init);
