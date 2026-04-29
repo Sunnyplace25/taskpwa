@@ -483,7 +483,7 @@ body {
   grid-template-rows: 1fr;
   gap: 8px;
   padding: 8px;
-  padding-bottom: calc(var(--nav-height) + 60px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(var(--nav-height) + 96px + env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -595,7 +595,7 @@ body {
   position: fixed;
   bottom: calc(var(--nav-height) + 8px + env(safe-area-inset-bottom, 0px));
   left: max(0px, calc((100vw - 480px) / 2));
-  right: max(0px, calc((100vw - 480px) / 2));
+  right: calc(max(0px, calc((100vw - 480px) / 2)) + 80px);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
