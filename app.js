@@ -1877,6 +1877,57 @@ function init() {
   scheduleAllNotifications();
   render();
 
+  // ── Pull-to-refresh（タスクビューのみ） ──────────────────
+  (function initPullToRefresh() {
+    const main = document.querySelector('.main');
+    if (!main) return;
+
+    const ptr = document.createElement('div');
+    ptr.id = 'ptrIndicator';
+    ptr.innerHTML = '↓ 更新';
+    main.prepend(ptr);
+
+    let startY = 0;
+    let dist = 0;
+    const THRESHOLD = 65;
+
+    main.addEventListener('touchstart', e => {
+      if (main.scrollTop <= 0 && currentView !== 'game') {
+        startY = e.touches[0].clientY;
+      } else {
+        startY = 0;
+      }
+      dist = 0;
+    }, { passive: true });
+
+    main.addEventListener('touchmove', e => {
+      if (!startY) return;
+      dist = e.touches[0].clientY - startY;
+      if (dist <= 0) { dist = 0; return; }
+      const h = Math.min(dist * 0.55, THRESHOLD);
+      ptr.style.height = h + 'px';
+      ptr.style.opacity = String(Math.min(dist / THRESHOLD, 1));
+    }, { passive: true });
+
+    main.addEventListener('touchend', () => {
+      if (!startY) return;
+      const pulled = dist >= THRESHOLD;
+      ptr.style.height = '0';
+      ptr.style.opacity = '0';
+      startY = 0;
+      dist = 0;
+      if (pulled) {
+        loadTasks();
+        render();
+        const chara = CHARACTERS[currentBg];
+        if (chara?.refresh) {
+          const msg = chara.refresh[Math.floor(Math.random() * chara.refresh.length)];
+          showOverlay(msg, chara.image, 3000);
+        }
+      }
+    }, { passive: true });
+  })();
+
   // アプリがバックグラウンド・非表示になったら音を止める
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) bgmPause();
