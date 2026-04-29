@@ -1245,6 +1245,8 @@ function init() {
   loadTasks();
   registerSW();
   updateNotifBtn();
+  const _calDate = document.getElementById('emptyCalDate');
+  if (_calDate) _calDate.textContent = new Date().getDate();
 
   function addBtn(id, fn) {
     const el = document.getElementById(id);
