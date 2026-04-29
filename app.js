@@ -1251,8 +1251,16 @@ function init() {
 
   function addBtn(id, fn) {
     const el = document.getElementById(id);
-    el.addEventListener('touchend', e => { e.preventDefault(); fn(); }, { passive: false });
-    el.addEventListener('click', fn);
+    let lastFired = 0;
+    el.addEventListener('touchend', e => {
+      e.preventDefault();
+      lastFired = Date.now();
+      fn();
+    }, { passive: false });
+    el.addEventListener('click', () => {
+      if (Date.now() - lastFired < 600) return;
+      fn();
+    });
   }
 
   addBtn('fabBtn', openAddModal);
