@@ -108,7 +108,7 @@ function formatDue(task) {
 }
 
 function getTodayTasks() {
-  return tasks.filter(t => !t.completed && t.dueDate && (isToday(t.dueDate) || isOverdue(t)));
+  return tasks.filter(t => !t.completed);
 }
 
 // ── Notifications ─────────────────────────────────────────
