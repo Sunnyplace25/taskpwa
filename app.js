@@ -1275,6 +1275,7 @@ function init() {
       pendingView = view;
       pgStopTimer();
       pgStopCountdown();
+      bgmFadeOut(600);
       document.getElementById('leaveOverlay').classList.remove('hidden');
     } else {
       switchView(view);
@@ -1300,7 +1301,7 @@ function init() {
   addBtn('leaveCancelBtn', () => {
     document.getElementById('leaveOverlay').classList.add('hidden');
     // タイマーを再開
-    if (!pgDead && pgCur) { pgStartTimer(); pgStartCountdown(); }
+    if (!pgDead && pgCur) { pgStartTimer(); pgStartCountdown(); bgmPlay(); }
     pendingView = null;
   });
   addBtn('gameResetBtn', gameInit);
@@ -1875,6 +1876,11 @@ function init() {
 
   scheduleAllNotifications();
   render();
+
+  // アプリがバックグラウンド・非表示になったら音を止める
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) bgmPause();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', init);
