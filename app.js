@@ -254,7 +254,7 @@ function renderList(listEl, emptyEl, items, completedItems) {
 function render() {
   if (currentView === 'today') {
     const active = getTodayTasks();
-    const done = tasks.filter(t => t.completed && t.dueDate && isToday(t.dueDate));
+    const done = tasks.filter(t => t.completed);
     renderList(
       document.getElementById('todayList'),
       document.getElementById('todayEmpty'),
