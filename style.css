@@ -5,9 +5,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
-  overscroll-behavior-y: none;
-}
 
 button, a, .task-checkbox, .task-card, .nav-btn, .fab, .pg-btn, .game-cell, .puyo-cell {
   touch-action: manipulation;
