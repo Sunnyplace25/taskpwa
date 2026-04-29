@@ -127,6 +127,8 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: calc(100dvh - var(--header-height) - var(--nav-height));
+  max-height: calc(100dvh - var(--header-height) - var(--nav-height));
 }
 
 .view { display: flex; flex-direction: column; gap: 10px; }
@@ -480,6 +482,7 @@ body {
   gap: 8px;
   padding: 8px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 #gameView.hidden { display: none !important; }
 
