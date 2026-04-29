@@ -486,7 +486,6 @@ body {
   padding: 8px;
   padding-bottom: calc(var(--nav-height) + 8px + env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
-  overflow: hidden;
 }
 #gameView.hidden { display: none !important; }
 
