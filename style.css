@@ -124,11 +124,11 @@ body {
 
 .main.game-mode {
   padding: 0;
+  padding-bottom: var(--nav-height);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - var(--header-height) - var(--nav-height));
-  max-height: calc(100dvh - var(--header-height) - var(--nav-height));
+  box-sizing: border-box;
 }
 
 .view { display: flex; flex-direction: column; gap: 10px; }
