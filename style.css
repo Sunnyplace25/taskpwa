@@ -476,10 +476,10 @@ body {
   min-height: 0;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr;
   gap: 8px;
   padding: 8px;
-  padding-bottom: calc(var(--nav-height) + 8px);
+  padding-bottom: calc(var(--nav-height) + 60px);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -586,13 +586,17 @@ body {
   box-shadow: 0 2px 10px rgba(99,102,241,0.4);
 }
 
-/* 操作ボタン（行2・列1〜2） */
+/* 操作ボタン：ナビバーの上に固定 */
 .pg-controls {
-  grid-row: 2;
-  grid-column: 1 / -1;
+  position: fixed;
+  bottom: calc(var(--nav-height) + 8px);
+  left: max(0px, calc((100vw - 480px) / 2));
+  right: max(0px, calc((100vw - 480px) / 2));
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
+  padding: 0 8px;
+  z-index: 5;
 }
 
 /* .game-layout は不要になったが念のため残す */
