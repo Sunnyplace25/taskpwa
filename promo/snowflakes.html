@@ -6,6 +6,9 @@
   <meta property="og:title" content="Snow flakes">
   <meta property="og:description" content="小説 × 音楽 × イラスト — 山吹ことり">
   <title>Snow flakes | プロジェクト紹介</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -21,9 +24,10 @@
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg); color: var(--text);
-      font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif;
+      font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
       overflow-x: hidden; line-height: 1.7;
     }
+    .f-en { font-family: 'Cormorant Garamond', 'Georgia', serif; }
     #snow { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4; }
     section { position: relative; z-index: 1; }
 
@@ -37,7 +41,7 @@
     }
     .nav-back { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
     .nav-back:hover { color: var(--text); }
-    .nav-label { font-size: 12px; letter-spacing: 6px; color: var(--muted); }
+    .nav-label { font-size: 12px; letter-spacing: 6px; color: var(--muted); font-family: 'Cormorant Garamond', serif; }
     .nav-app {
       padding: 8px 22px; border-radius: 100px;
       background: rgba(147,197,253,0.1); border: 1.5px solid var(--hinata);
@@ -59,16 +63,19 @@
     }
     .hero-snowflake { font-size: 52px; margin-bottom: 24px; opacity: 0.9; }
     .hero-title {
-      font-size: clamp(56px, 10vw, 96px); font-weight: bold; color: white;
-      margin-bottom: 16px; letter-spacing: 4px;
+      font-size: clamp(36px, 6vw, 72px); font-weight: 300; color: white;
+      margin-bottom: 24px; letter-spacing: 2px; line-height: 1.5;
+      font-family: 'Noto Serif JP', serif;
     }
     .hero-sub {
-      font-size: clamp(14px, 2vw, 18px); color: var(--muted);
-      letter-spacing: 6px; margin-bottom: 32px;
+      font-size: clamp(14px, 2vw, 17px); color: var(--muted);
+      letter-spacing: 8px; margin-bottom: 32px;
+      font-family: 'Cormorant Garamond', serif; font-weight: 300;
     }
     .hero-tagline {
-      font-size: clamp(16px, 2.5vw, 20px); color: #94a3b8;
-      max-width: 520px; margin: 0 auto 56px; line-height: 1.9;
+      font-size: clamp(16px, 2.5vw, 22px); color: #94a3b8;
+      max-width: 520px; margin: 0 auto 56px; line-height: 2.2;
+      font-weight: 300;
     }
     .genre-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
     .g-pill {
@@ -80,8 +87,8 @@
     @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 
     /* Section common */
-    .sec-label { display: block; font-size: 11px; letter-spacing: 7px; color: var(--muted); text-align: center; margin-bottom: 12px; }
-    .sec-title { font-size: clamp(26px, 4vw, 36px); font-weight: bold; color: white; text-align: center; margin-bottom: 56px; }
+    .sec-label { display: block; font-size: 11px; letter-spacing: 7px; color: var(--muted); text-align: center; margin-bottom: 12px; font-family: 'Cormorant Garamond', serif; font-weight: 400; }
+    .sec-title { font-size: clamp(26px, 4vw, 36px); font-weight: 300; color: white; text-align: center; margin-bottom: 56px; font-family: 'Noto Serif JP', serif; }
 
     /* About */
     .about { padding: 100px 24px; }
@@ -108,9 +115,9 @@
       border: 1px solid rgba(147,197,253,0.2);
       display: flex; flex-direction: column; gap: 20px;
     }
-    .novel-meta { font-size: 13px; color: var(--muted); letter-spacing: 2px; }
-    .novel-title { font-size: 28px; font-weight: bold; color: white; }
-    .novel-body { font-size: 15px; color: #94a3b8; line-height: 1.9; }
+    .novel-meta { font-size: 12px; color: var(--muted); letter-spacing: 2px; font-family: 'Cormorant Garamond', serif; }
+    .novel-title { font-size: 30px; font-weight: 400; color: white; font-family: 'Cormorant Garamond', serif; letter-spacing: 3px; }
+    .novel-body { font-size: 15px; color: #94a3b8; line-height: 1.9; font-weight: 300; }
     .novel-tags { display: flex; flex-wrap: wrap; gap: 8px; }
     .n-tag {
       padding: 5px 14px; border-radius: 100px; font-size: 12px;
@@ -140,8 +147,8 @@
       transition: transform 0.2s;
     }
     .music-card:hover { transform: translateY(-3px); }
-    .music-platform { font-size: 12px; letter-spacing: 3px; color: var(--muted); }
-    .music-name { font-size: 20px; font-weight: bold; color: white; }
+    .music-platform { font-size: 11px; letter-spacing: 4px; color: var(--muted); font-family: 'Cormorant Garamond', serif; }
+    .music-name { font-size: 20px; font-weight: 300; color: white; font-family: 'Noto Serif JP', serif; }
     .music-desc { font-size: 14px; color: var(--muted); line-height: 1.8; flex: 1; }
     .btn-green  { background: rgba(110,231,183,0.12); border: 1.5px solid #6ee7b7; color: #6ee7b7; }
     .btn-purple { background: rgba(196,181,253,0.12); border: 1.5px solid #c4b5fd; color: #c4b5fd; }
@@ -180,7 +187,7 @@
     .char-img { width: 100%; aspect-ratio: 3/4; object-fit: contain; display: block; background: rgba(0,0,0,0.2); }
     .char-info { padding: 20px; }
     .char-num  { font-size: 11px; letter-spacing: 3px; color: var(--muted); margin-bottom: 6px; }
-    .char-name { font-size: 22px; font-weight: bold; margin-bottom: 4px; }
+    .char-name { font-size: 22px; font-weight: 400; margin-bottom: 4px; font-family: 'Noto Serif JP', serif; }
     .char-role { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
     .char-desc { font-size: 13px; color: #475569; line-height: 1.7; }
 
