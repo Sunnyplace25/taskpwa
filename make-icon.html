@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アイコン生成</title>
+  <style>
+    body { background: #1e293b; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 20px; margin: 0; }
+    canvas { border-radius: 40px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); }
+    button { padding: 14px 36px; border-radius: 100px; background: #93c5fd; color: #0f172a; font-size: 16px; font-weight: bold; border: none; cursor: pointer; }
+    button:hover { opacity: 0.85; }
+    .note { color: #64748b; font-size: 13px; text-align: center; max-width: 420px; line-height: 1.8; }
+    h2 { font-size: 18px; color: #e2e8f0; margin: 0; }
+  </style>
+</head>
+<body>
+  <h2>iOSアイコン生成（180×180）</h2>
+  <canvas id="c" width="180" height="180"></canvas>
+  <button onclick="dl()">apple-touch-icon.png をダウンロード</button>
+  <p class="note">
+    ダウンロードしたファイルを<br>
+    <strong style="color:#e2e8f0">taskpwa フォルダ</strong> の
+    <strong style="color:#e2e8f0">apple-touch-icon.png</strong> と差し替えて、<br>
+    GitHubにpushしてください
+  </p>
+
+  <img id="src" src="47657868-935a-48b2-8732-caaf02bc812a.png" crossorigin="anonymous" style="display:none" alt="">
+
+  <script>
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    const img = document.getElementById('src');
+
+    function draw(source) {
+      ctx.clearRect(0, 0, 180, 180);
+      // 黒背景（念のため）
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, 180, 180);
+      if (source) {
+        ctx.drawImage(source, 0, 0, 180, 180);
+      }
+    }
+
+    img.onload = () => { try { draw(img); } catch(e) { draw(null); } };
+    img.onerror = () => { draw(null); };
+    if (img.complete) { try { draw(img); } catch(e) { draw(null); } }
+
+    function dl() {
+      try {
+        const a = document.createElement('a');
+        a.download = 'apple-touch-icon.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+      } catch(e) {
+        alert('ローカルファイルとして開いているとCORS制限がかかります。\nVSCodeのLive Serverで開いてから試してください。');
+      }
+    }
+  </script>
+</body>
+</html>
