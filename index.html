@@ -18,7 +18,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.png" type="image/png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=63">
+  <link rel="stylesheet" href="style.css?v=64">
 </head>
 <body>
   <div id="app">
@@ -187,13 +187,15 @@
         </div>
         <!-- 列2・行1: サイドパネル -->
         <div class="game-side">
-          <div class="gs-score-card">
-            <span class="gs-score-label">Score</span>
-            <span id="pgScore" class="pg-score">0</span>
-          </div>
-          <div class="gs-timer-card">
-            <span class="gs-timer-label">Time</span>
-            <span id="pgTimer" class="pg-timer">90</span>
+          <div class="gs-score-timer-row">
+            <div class="gs-score-card">
+              <span class="gs-score-label">Score</span>
+              <span id="pgScore" class="pg-score">0</span>
+            </div>
+            <div class="gs-timer-card">
+              <span class="gs-timer-label">Time</span>
+              <span id="pgTimer" class="pg-timer">90</span>
+            </div>
           </div>
           <div class="gs-next-card">
             <span class="gs-next-label">Next</span>
@@ -402,7 +404,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=82"></script>
+  <script src="app.js?v=83"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').then(reg => {
