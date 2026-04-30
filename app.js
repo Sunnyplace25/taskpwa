@@ -1268,16 +1268,47 @@ function init() {
   addBtn('modalClose', closeModal);
   addBtn('cancelBtn', closeModal);
   addBtn('saveBtn', saveTask);
-  // ゲーム中は離脱確認を挟む
+  // ゲーム中は2回タップで離脱確認ダイアログ
   let pendingView = null;
+  let navTapView = null;
+  let navTapTimer = null;
+
+  function showLeaveDialog(view) {
+    pendingView = view;
+    pgStopTimer();
+    pgStopCountdown();
+    bgmFadeOut(600);
+    const overlay = document.getElementById('leaveOverlay');
+    overlay.classList.remove('hidden');
+    // ダイアログ表示中はナビバーをロック
+    document.querySelector('.bottom-nav').style.pointerEvents = 'none';
+  }
+
+  function closeLeaveDialog() {
+    document.getElementById('leaveOverlay').classList.add('hidden');
+    document.querySelector('.bottom-nav').style.pointerEvents = '';
+  }
+
   function navTo(view) {
     if (currentView === 'game' && !pgDead && view !== 'game') {
-      pendingView = view;
-      pgStopTimer();
-      pgStopCountdown();
-      bgmFadeOut(600);
-      document.getElementById('leaveOverlay').classList.remove('hidden');
+      if (navTapView === view) {
+        // 2回目タップ → ダイアログ表示
+        clearTimeout(navTapTimer);
+        navTapView = null;
+        showLeaveDialog(view);
+      } else {
+        // 1回目タップ → ロック状態を視覚表示
+        navTapView = view;
+        const btn = document.querySelector(`[data-view="${view}"]`);
+        btn?.classList.add('nav-locked');
+        clearTimeout(navTapTimer);
+        navTapTimer = setTimeout(() => {
+          navTapView = null;
+          btn?.classList.remove('nav-locked');
+        }, 2000);
+      }
     } else {
+      navTapView = null;
       switchView(view);
     }
   }
@@ -1294,12 +1325,12 @@ function init() {
   updateCharaBtns();
 
   addBtn('leaveOkBtn', () => {
-    document.getElementById('leaveOverlay').classList.add('hidden');
+    closeLeaveDialog();
     switchView(pendingView);
     pendingView = null;
   });
   addBtn('leaveCancelBtn', () => {
-    document.getElementById('leaveOverlay').classList.add('hidden');
+    closeLeaveDialog();
     // タイマーを再開
     if (!pgDead && pgCur) { pgStartTimer(); pgStartCountdown(); bgmPlay(); }
     pendingView = null;
