@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 99;
+const APP_VERSION = 100;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -640,8 +640,6 @@ const GS_BG_FIRST = { 'bg.jpg': 0, 'bg3.jpg': 1, 'bg2.jpg': 2, 'sweets_hinata.jp
 const SPECIAL_BG_IMGS  = ['sweets_hinata.jpg', 'sweets_kouta.jpg', 'sweets_hayate.jpg'];
 const SPECIAL_BG_NAMES = ['ヒナタ', 'コウタ', 'ハヤテ'];
 let specialBgUnlocked = JSON.parse(localStorage.getItem('specialBgUnlocked') || '[false,false,false]');
-let _onSpecialBgUpdate = null;
-
 function bgBaseKey(bg) {
   if (bg === 'sweets_hinata.jpg') return 'bg.jpg';
   if (bg === 'sweets_kouta.jpg')  return 'bg3.jpg';
@@ -656,9 +654,9 @@ const EPISODE_DAY_LIMIT_MSG = {
 };
 
 const GS_KEY_CHARA = [
-  { img: 'chara_hinata.png', color: '#93c5fd', msg: (w) => `<span style="color:#93c5fd;font-weight:700">${w}</span>、か。<br>覚えておいて。` },
-  { img: 'chara_kouta.png',  color: '#fca5a5', msg: (w) => `<span style="color:#fca5a5;font-weight:700">${w}</span>、見えた。<br>使ってみろ。` },
-  { img: 'chara_hayate.png', color: '#fde68a', textColor: '#fb923c', msg: (w) => `<span style="color:#fb923c;font-weight:700">${w}</span>、でた！<br>やったじゃん！` },
+  { img: 'chara_hinata.png', color: '#93c5fd', msg: (w) => `<span style="color:#93c5fd;font-weight:700">${w}</span>、か。<br>覚えておいて。`, bgMsg: '新しい景色になった' },
+  { img: 'chara_kouta.png',  color: '#fca5a5', msg: (w) => `<span style="color:#fca5a5;font-weight:700">${w}</span>、見えた。<br>使ってみろ。`, bgMsg: 'これで行く' },
+  { img: 'chara_hayate.png', color: '#fde68a', textColor: '#fb923c', msg: (w) => `<span style="color:#fb923c;font-weight:700">${w}</span>、でた！<br>やったじゃん！`, bgMsg: 'わー！背景変わった！' },
 ];
 let gsKeyRevealed = JSON.parse(localStorage.getItem('gsKeyRevealed') || '[false,false,false]');
 let gsSnowCount = Number(localStorage.getItem('gsSnowCount') || 0);
@@ -734,15 +732,22 @@ function addSnowCount(n) {
   });
   if (newUnlock) {
     localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
-    // スペシャル背景アンロック
+    // スペシャル背景アンロック（解放時に即切り替え＋ポップアップ）
     GS_KEY_THRESHOLDS.forEach((threshold, rank) => {
       const keyIdx = order[rank];
       if (gsKeyRevealed[keyIdx] && !specialBgUnlocked[keyIdx]) {
         specialBgUnlocked[keyIdx] = true;
+        const kc = GS_KEY_CHARA[keyIdx];
+        const bgImg = SPECIAL_BG_IMGS[keyIdx];
+        setTimeout(() => {
+          currentBg = bgImg;
+          const el = document.getElementById('bgImg');
+          if (el) el.style.backgroundImage = `url('${bgImg}')`;
+          queuePopup(kc.img, `✨ ${kc.bgMsg}`, 4000);
+        }, rank * 300 + 1000);
       }
     });
     localStorage.setItem('specialBgUnlocked', JSON.stringify(specialBgUnlocked));
-    if (_onSpecialBgUpdate) _onSpecialBgUpdate();
     // 全鍵解放後、自動リセット
     if (gsKeyRevealed.every(v => v)) {
       setTimeout(() => {
@@ -1313,8 +1318,9 @@ function setFavBg(bg) {
 }
 
 function setRandomBg(forceRandom = false) {
-  const images = ['bg.jpg', 'bg2.jpg', 'bg3.jpg'];
-  const picked = (!forceRandom && favBg) ? favBg : images[Math.floor(Math.random() * 3)];
+  let images = ['bg.jpg', 'bg2.jpg', 'bg3.jpg'];
+  SPECIAL_BG_IMGS.forEach((img, i) => { if (specialBgUnlocked[i]) images.push(img); });
+  const picked = (!forceRandom && favBg) ? favBg : images[Math.floor(Math.random() * images.length)];
   currentBg = picked;
   document.getElementById('bgImg').style.backgroundImage = `url('${picked}')`;
 }
@@ -1483,29 +1489,6 @@ function init() {
   };
   let specialUnlocked = JSON.parse(localStorage.getItem('specialUnlocked') || '{}');
 
-  function renderSpecialBgSlots() {
-    const container = document.getElementById('specialBgSlots');
-    if (!container) return;
-    container.innerHTML = '';
-    const anyUnlocked = specialBgUnlocked.some(v => v);
-    container.style.display = anyUnlocked ? '' : 'none';
-    if (!anyUnlocked) return;
-    SPECIAL_BG_IMGS.forEach((img, i) => {
-      if (!specialBgUnlocked[i]) return;
-      const btn = document.createElement('button');
-      btn.className = 'settings-chara-btn';
-      btn.dataset.bg = img;
-      btn.innerHTML = `<img src="${img}" alt="${SPECIAL_BG_NAMES[i]}"><span>${SPECIAL_BG_NAMES[i]}</span>`;
-      btn.addEventListener('click', () => {
-        setFavBg(img);
-        setRandomBg();
-      });
-      container.appendChild(btn);
-    });
-    updateCharaBtns();
-  }
-  _onSpecialBgUpdate = renderSpecialBgSlots;
-
   function renderSpecialSlots() {
     const container = document.getElementById('specialSlots');
     if (!container) return;
@@ -1643,17 +1626,6 @@ function init() {
       setTimeout(() => { hint.textContent = ''; }, 2500);
       return;
     }
-    // テスト用：スペシャル背景全解放
-    if (val === 'テスト背景') {
-      input.value = '';
-      specialBgUnlocked = [true, true, true];
-      localStorage.setItem('specialBgUnlocked', JSON.stringify(specialBgUnlocked));
-      renderSpecialBgSlots();
-      hint.textContent = 'スペシャル背景を全解放しました（テスト）';
-      hint.style.color = '#6366f1';
-      setTimeout(() => { hint.textContent = ''; }, 2500);
-      return;
-    }
     const match = SPECIAL_CODES[val];
     if (match) {
       if (specialUnlocked[match.key]) {
@@ -1680,7 +1652,6 @@ function init() {
   }
 
   renderSpecialSlots();
-  renderSpecialBgSlots();
   addBtn('codeSubmit', checkCode);
   document.getElementById('codeInput')?.addEventListener('keydown', e => {
     if (e.key === 'Enter') checkCode();
