@@ -1155,6 +1155,12 @@ function showPopup(msg, duration = 3500) {
   queuePopup(chara.image, msg, duration);
 }
 
+const EPISODE_UNLOCK_MSG = {
+  hinata: { img: 'chara_hinata.png', msg: '……読んでくれたんだ。<br>少し、恥ずかしいけど' },
+  kouta:  { img: 'chara_kouta.png',  msg: '解放した。<br>……読むか、読まないかはお前次第だ' },
+  hayate: { img: 'chara_hayate.png', msg: 'エピソード解放！<br>読んでくれたらうれしいんだけど！' },
+};
+
 const SPECIAL_UNLOCK_MSG = {
   hinata: { img: 'chara_hinata.png', msg: '……見てくれたんだ。<br>ありがとう' },
   kouta:  { img: 'chara_kouta.png',  msg: 'ちゃんと届いた。<br>悪くない' },
@@ -1680,7 +1686,8 @@ function init() {
 
 それを確かめるように、ゆっくりと食べていく。` },
   };
-  let episodeUnlocked = JSON.parse(localStorage.getItem('episodeUnlocked') || '{}');
+  let episodeUnlocked   = JSON.parse(localStorage.getItem('episodeUnlocked')   || '{}');
+  let musicPopupShown   = JSON.parse(localStorage.getItem('musicPopupShown')   || '{}');
 
   const EPISODE_HINT_MSG = {
     hinata: { img: 'chara_hinata.png', msg: '……俺が食べていたのは？' },
@@ -1721,6 +1728,13 @@ function init() {
     const inner = document.getElementById('episodeViewer').querySelector('.episode-viewer-inner');
     inner.style.backgroundImage = info.bgImg ? `url('${info.bgImg}')` : '';
     document.getElementById('episodeViewer').classList.remove('hidden');
+
+    // 初回開封 & ミュージック解放済みならポップアップ
+    if (isMusicUnlocked(info.key) && !musicPopupShown[info.key]) {
+      musicPopupShown[info.key] = true;
+      localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
+      setTimeout(() => showMusicUnlockPopup(info.key), 1200);
+    }
   }
 
   document.getElementById('episodeViewerClose').addEventListener('click', () => {
@@ -1749,7 +1763,9 @@ function init() {
         renderMusicList();
         hint.textContent = `${match.name}のエピソードが解放されました！`;
         hint.style.color = '#6366f1';
-        if (isMusicUnlocked(match.key)) showMusicUnlockPopup(match.key);
+        // エピソード解放の一言ポップアップ（ミュージックは初回開封時に表示）
+        const em = EPISODE_UNLOCK_MSG[match.key];
+        if (em) queuePopup(em.img, `📖 ${em.msg}`, 4000);
       }
     } else {
       hint.textContent = 'キーワードが違います';
