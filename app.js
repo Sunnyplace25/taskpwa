@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 98;
+const APP_VERSION = 99;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1640,6 +1640,17 @@ function init() {
     if (val === '悪くない') {
       input.value = '';
       resetBest(hint);
+      setTimeout(() => { hint.textContent = ''; }, 2500);
+      return;
+    }
+    // テスト用：スペシャル背景全解放
+    if (val === 'テスト背景') {
+      input.value = '';
+      specialBgUnlocked = [true, true, true];
+      localStorage.setItem('specialBgUnlocked', JSON.stringify(specialBgUnlocked));
+      renderSpecialBgSlots();
+      hint.textContent = 'スペシャル背景を全解放しました（テスト）';
+      hint.style.color = '#6366f1';
       setTimeout(() => { hint.textContent = ''; }, 2500);
       return;
     }
