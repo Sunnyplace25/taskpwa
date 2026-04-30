@@ -1289,26 +1289,27 @@ function init() {
     document.querySelector('.bottom-nav').style.pointerEvents = '';
   }
 
+  function clearNavLock() {
+    clearTimeout(navTapTimer);
+    navTapView = null;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-locked'));
+  }
+
   function navTo(view) {
     if (currentView === 'game' && !pgDead && view !== 'game') {
-      if (navTapView === view) {
-        // 2回目タップ → ダイアログ表示
-        clearTimeout(navTapTimer);
-        navTapView = null;
+      if (navTapView !== null) {
+        // 2回目タップ（どのボタンでも）→ ダイアログ表示
+        clearNavLock();
         showLeaveDialog(view);
       } else {
         // 1回目タップ → ロック状態を視覚表示
         navTapView = view;
         const btn = document.querySelector(`[data-view="${view}"]`);
         btn?.classList.add('nav-locked');
-        clearTimeout(navTapTimer);
-        navTapTimer = setTimeout(() => {
-          navTapView = null;
-          btn?.classList.remove('nav-locked');
-        }, 2000);
+        navTapTimer = setTimeout(clearNavLock, 2000);
       }
     } else {
-      navTapView = null;
+      clearNavLock();
       switchView(view);
     }
   }
