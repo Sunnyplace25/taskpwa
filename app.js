@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 87;
+const APP_VERSION = 88;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1166,6 +1166,15 @@ const CHARA_REC = {
   },
 };
 
+const _recQueues = new Map();
+function _nextRecItem(key, items) {
+  if (!_recQueues.has(key) || _recQueues.get(key).length === 0) {
+    const shuffled = [...items].sort(() => Math.random() - 0.5);
+    _recQueues.set(key, shuffled);
+  }
+  return _recQueues.get(key).shift();
+}
+
 function showCharaRec(bg) {
   if (!bg) {
     const hakoshi = [
@@ -1173,13 +1182,13 @@ function showCharaRec(bg) {
       { img: 'chara_kouta.png',  msg: '残ったなら、いいねと登録で応援してくれ。三人で続ける' },
       { img: 'chara_hayate.png', msg: 'いいなって思ったら、いいねと登録で応援して！めっちゃ励みになるから！' },
     ];
-    const pick = hakoshi[Math.floor(Math.random() * hakoshi.length)];
+    const pick = _nextRecItem('hakoshi', hakoshi);
     setTimeout(() => showOverlay(pick.msg, pick.img, 5500), 80);
     return;
   }
   const rec = CHARA_REC[bg];
   if (!rec) return;
-  const i = rec.items[Math.floor(Math.random() * rec.items.length)];
+  const i = _nextRecItem(bg, rec.items);
   setTimeout(() => queuePopup(rec.img, `<span class="rec-tag ${i.cls}">${i.label}</span>${i.line}`, 4000), 80);
 }
 
