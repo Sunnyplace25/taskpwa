@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 101;
+const APP_VERSION = '1.02';
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -635,7 +635,9 @@ function pgResolve(chain) {
 // GS_KEYWORDS[i] と gsKey-{i} スロットは常に対応固定
 // 0=残る(ヒナタ) 1=半分(コウタ) 2=重なる(ハヤテ)
 const GS_KEYWORDS = ['残る', '半分', '重なる'];
-const GS_KEY_THRESHOLDS = [50, 100, 150];
+function getKeyThresholds() {
+  return sweetsUnlocked ? [50, 100, 150] : [30, 65, 100];
+}
 const GS_BG_FIRST = { 'bg.jpg': 0, 'bg3.jpg': 1, 'bg2.jpg': 2, 'sweets_hinata.jpg': 0, 'sweets_kouta.jpg': 1, 'sweets_hayate.jpg': 2 };
 const SPECIAL_BG_IMGS  = ['sweets_hinata.jpg', 'sweets_kouta.jpg', 'sweets_hayate.jpg'];
 const SPECIAL_BG_NAMES = ['ヒナタ', 'コウタ', 'ハヤテ'];
@@ -691,8 +693,8 @@ function renderGsKeys() {
       };
     } else {
       const rank = order.indexOf(i);
-      const prev = rank === 0 ? 0 : GS_KEY_THRESHOLDS[rank - 1];
-      const cur = GS_KEY_THRESHOLDS[rank];
+      const prev = rank === 0 ? 0 : getKeyThresholds()[rank - 1];
+      const cur = getKeyThresholds()[rank];
       const progress = Math.max(0, Math.min(gsSnowCount, cur) - prev);
       const total = cur - prev;
       el.className = 'gs-key-slot locked';
@@ -709,7 +711,7 @@ function addSnowCount(n) {
   localStorage.setItem('gsSnowCount', gsSnowCount);
   const order = getKeyOrder();
   let newUnlock = false;
-  GS_KEY_THRESHOLDS.forEach((threshold, rank) => {
+  getKeyThresholds().forEach((threshold, rank) => {
     const keyIdx = order[rank];
     if (!gsKeyRevealed[keyIdx] && gsSnowCount >= threshold) {
       gsKeyRevealed[keyIdx] = true;
@@ -733,7 +735,7 @@ function addSnowCount(n) {
   if (newUnlock) {
     localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
     // スペシャル背景アンロック（解放時に即切り替え＋ポップアップ）
-    GS_KEY_THRESHOLDS.forEach((threshold, rank) => {
+    getKeyThresholds().forEach((threshold, rank) => {
       const keyIdx = order[rank];
       if (gsKeyRevealed[keyIdx] && !specialBgUnlocked[keyIdx]) {
         specialBgUnlocked[keyIdx] = true;
@@ -1595,7 +1597,7 @@ function init() {
     sweetsUnlocked = true;
     localStorage.setItem('sweetsUnlocked', 'true');
     gsKeyRevealed = [true, true, true];
-    gsSnowCount = GS_KEY_THRESHOLDS[GS_KEY_THRESHOLDS.length - 1];
+    gsSnowCount = getKeyThresholds()[getKeyThresholds().length - 1];
     localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
     localStorage.setItem('gsSnowCount', gsSnowCount);
     renderSpecialSlots();
