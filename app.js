@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 86;
+const APP_VERSION = 87;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1149,10 +1149,10 @@ const CHARA_REC = {
   'bg3.jpg': {
     img: 'chara_kouta.png',
     items: [
-      { cls: 'rec-narou',  label: '📖 小説を読む', line: '読め。気づいたら最後までいってる' },
-      { cls: 'rec-insta',  label: '📷 Instagram',  line: 'フォローしとけ。ちゃんと続くから' },
-      { cls: 'rec-yt',     label: '▶ YouTube',     line: '一回聴け。たぶん残る' },
-      { cls: 'rec-kindle', label: '📚 Kindle',     line: '持っとけ。あとで効いてくる' },
+      { cls: 'rec-narou',  label: '📖 小説を読む', line: '気になるなら、ここ。ゆっくり読めばいい' },
+      { cls: 'rec-insta',  label: '📷 Instagram',  line: 'フォローしてくれたら助かる。ゆるく見てくれ' },
+      { cls: 'rec-yt',     label: '▶ YouTube',     line: '一回聴いてみてくれ。合うと思う' },
+      { cls: 'rec-kindle', label: '📚 Kindle',     line: 'まとめて読むならこれ。手元にあってもいい' },
     ],
   },
   'bg2.jpg': {
