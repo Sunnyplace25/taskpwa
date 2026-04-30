@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タスク管理 | Snow flakes Task</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --accent: #93c5fd;
+      --bg: #0c1220; --text: #e2e8f0; --muted: #64748b;
+      --card: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif;
+      overflow-x: hidden;
+    }
+    #snow { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35; }
+    section { position: relative; z-index: 1; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(12,18,32,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back {
+      font-size: 14px; color: var(--muted); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--accent); }
+    .nav-label { font-size: 12px; letter-spacing: 5px; color: var(--muted); }
+    .nav-cta {
+      padding: 8px 22px; border-radius: 100px;
+      background: rgba(147,197,253,0.1); border: 1.5px solid var(--accent);
+      color: var(--accent); font-size: 14px; text-decoration: none;
+    }
+    .nav-cta:hover { background: rgba(147,197,253,0.2); }
+
+    /* Hero */
+    .hero {
+      padding: 160px 24px 80px;
+      text-align: center;
+      background: radial-gradient(ellipse at center top, rgba(147,197,253,0.1) 0%, transparent 60%);
+    }
+    .hero-icon { font-size: 64px; margin-bottom: 24px; }
+    .hero-label { font-size: 11px; letter-spacing: 7px; color: var(--muted); margin-bottom: 16px; }
+    .hero-title { font-size: clamp(48px, 8vw, 72px); font-weight: bold; color: white; margin-bottom: 20px; }
+    .hero-desc  { font-size: 18px; color: #94a3b8; max-width: 560px; margin: 0 auto 48px; line-height: 1.8; }
+
+    /* Detail cards */
+    .detail { padding: 80px 24px; }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px; max-width: 900px; margin: 0 auto;
+    }
+    .d-card {
+      padding: 32px; border-radius: 18px;
+      background: var(--card); border: 1px solid rgba(147,197,253,0.15);
+      transition: transform 0.2s;
+    }
+    .d-card:hover { transform: translateY(-3px); }
+    .d-num  { font-size: 11px; letter-spacing: 3px; color: var(--accent); opacity: 0.6; margin-bottom: 12px; }
+    .d-name { font-size: 20px; font-weight: bold; color: white; margin-bottom: 10px; }
+    .d-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
+    .d-tag  {
+      display: inline-block; margin-top: 14px;
+      padding: 4px 12px; border-radius: 100px;
+      background: rgba(147,197,253,0.08); border: 1px solid rgba(147,197,253,0.3);
+      font-size: 12px; color: var(--accent);
+    }
+
+    /* Views section */
+    .views { padding: 0 24px 80px; }
+    .view-tabs {
+      display: flex; gap: 10px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 40px;
+    }
+    .view-tab {
+      padding: 12px 28px; border-radius: 12px;
+      background: var(--card); border: 1px solid var(--border);
+      font-size: 16px; color: var(--muted);
+      cursor: default; transition: all 0.2s;
+    }
+    .view-tab.active {
+      background: rgba(147,197,253,0.12); border-color: var(--accent); color: var(--accent);
+    }
+
+    /* CTA */
+    .cta-sec { padding: 80px 24px; text-align: center; }
+    .cta {
+      display: inline-block; padding: 18px 52px; border-radius: 100px;
+      background: linear-gradient(135deg, #93c5fd, #fca5a5);
+      color: #0f172a; font-size: 18px; font-weight: bold;
+      text-decoration: none; transition: opacity 0.2s, transform 0.2s;
+    }
+    .cta:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* Color bar + footer */
+    .color-bar { height: 4px; display: flex; }
+    .cb1 { flex:1; background: #93c5fd; }
+    .cb2 { flex:1; background: #fca5a5; }
+    .cb3 { flex:1; background: #fde68a; }
+    footer { padding: 36px 24px; text-align: center; }
+    footer p { font-size: 12px; color: #1e293b; letter-spacing: 4px; }
+
+    @media (max-width: 600px) { nav { padding: 14px 20px; } .nav-label { display: none; } }
+  </style>
+</head>
+<body>
+<canvas id="snow"></canvas>
+
+<nav>
+  <a class="nav-back" href="index.html">← もどる</a>
+  <span class="nav-label">SNOW FLAKES TASK</span>
+  <a class="nav-cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-icon">📋</div>
+  <p class="hero-label">FEATURE 01</p>
+  <h1 class="hero-title">タスク管理</h1>
+  <p class="hero-desc">今日やること、今週の予定、全部まとめてここで管理。<br>シンプルに、でも必要なことは全部できる。</p>
+</section>
+
+<section class="detail">
+  <div class="detail-grid">
+    <div class="d-card">
+      <p class="d-num">01</p>
+      <p class="d-name">3つのビュー</p>
+      <p class="d-desc">「今日」「今週」「すべて」の3つで切り替えて表示。今日やることだけに集中できる。</p>
+      <span class="d-tag">今日 / 今週 / すべて</span>
+    </div>
+    <div class="d-card">
+      <p class="d-num">02</p>
+      <p class="d-name">優先度設定</p>
+      <p class="d-desc">高・中・低の3段階で優先度を設定。重要なタスクを見落とさない。</p>
+      <span class="d-tag">高 / 中 / 低</span>
+    </div>
+    <div class="d-card">
+      <p class="d-num">03</p>
+      <p class="d-name">繰り返しタスク</p>
+      <p class="d-desc">毎日・毎週など、定期的なタスクを自動で繰り返し登録できる。</p>
+      <span class="d-tag">毎日 / 毎週 など</span>
+    </div>
+    <div class="d-card">
+      <p class="d-num">04</p>
+      <p class="d-name">期限と通知</p>
+      <p class="d-desc">期限日時を設定して通知を受け取れる。締め切りを忘れない。</p>
+      <span class="d-tag">通知対応</span>
+    </div>
+    <div class="d-card">
+      <p class="d-num">05</p>
+      <p class="d-name">完了チェック</p>
+      <p class="d-desc">タスクをタップするだけで完了。完了したタスクはまとめて確認できる。</p>
+      <span class="d-tag">タップで完了</span>
+    </div>
+    <div class="d-card">
+      <p class="d-num">06</p>
+      <p class="d-name">オフライン対応</p>
+      <p class="d-desc">インターネット接続がなくてもタスクの確認・追加ができる。</p>
+      <span class="d-tag">PWA / オフライン</span>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec">
+  <a class="cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く →</a>
+</section>
+
+<div class="color-bar"><span class="cb1"></span><span class="cb2"></span><span class="cb3"></span></div>
+<footer><p>SNOW FLAKES / 山吹ことり</p></footer>
+
+<script>
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  const flakes = Array.from({length: 60}, () => ({
+    x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+    r: Math.random() * 1.6 + 0.4, speed: Math.random() * 0.5 + 0.15,
+    drift: (Math.random() - 0.5) * 0.25
+  }));
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    for (const f of flakes) {
+      ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI*2); ctx.fill();
+      f.y += f.speed; f.x += f.drift;
+      if (f.y > canvas.height + 4) { f.y = -4; f.x = Math.random() * canvas.width; }
+      if (f.x < -4) f.x = canvas.width + 4;
+      if (f.x > canvas.width + 4) f.x = -4;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<svg width="1080" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c1220"/>
+      <stop offset="100%" stop-color="#1a1640"/>
+    </linearGradient>
+    <clipPath id="cp1"><rect x="100" y="560" width="258" height="330" rx="14"/></clipPath>
+    <clipPath id="cp2"><rect x="411" y="560" width="258" height="330" rx="14"/></clipPath>
+    <clipPath id="cp3"><rect x="722" y="560" width="258" height="330" rx="14"/></clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- Snow particles -->
+  <g fill="white" opacity="0.35">
+    <circle cx="82"  cy="45"  r="2"/>
+    <circle cx="200" cy="95"  r="1.5"/>
+    <circle cx="340" cy="32"  r="2.5"/>
+    <circle cx="480" cy="70"  r="1.5"/>
+    <circle cx="610" cy="22"  r="2"/>
+    <circle cx="740" cy="58"  r="1.5"/>
+    <circle cx="880" cy="40"  r="2"/>
+    <circle cx="980" cy="85"  r="1.5"/>
+    <circle cx="1055" cy="38" r="2"/>
+    <circle cx="38"  cy="230" r="1.5"/>
+    <circle cx="55"  cy="420" r="2"/>
+    <circle cx="30"  cy="610" r="1.5"/>
+    <circle cx="18"  cy="800" r="2"/>
+    <circle cx="1060" cy="180" r="1.5"/>
+    <circle cx="1048" cy="380" r="2"/>
+    <circle cx="1065" cy="540" r="1.5"/>
+    <circle cx="1050" cy="700" r="2"/>
+    <circle cx="200"  cy="1040" r="1.5"/>
+    <circle cx="380"  cy="1055" r="2"/>
+    <circle cx="560"  cy="1045" r="1.5"/>
+    <circle cx="750"  cy="1060" r="2"/>
+    <circle cx="920"  cy="1038" r="1.5"/>
+  </g>
+
+  <!-- Decorative large ❄ -->
+  <text x="22"  y="140" font-size="90" fill="#93c5fd" opacity="0.07" font-family="sans-serif">❄</text>
+  <text x="960" y="200" font-size="70" fill="#fca5a5" opacity="0.07" font-family="sans-serif">❄</text>
+  <text x="500" y="88"  font-size="42" fill="white"   opacity="0.04" font-family="sans-serif">❄</text>
+
+  <!-- Brand label -->
+  <text x="540" y="128" text-anchor="middle" font-size="14" letter-spacing="9"
+        fill="#475569" font-family="'Arial', sans-serif" font-weight="300">SNOW FLAKES</text>
+
+  <!-- Thin divider -->
+  <line x1="380" y1="145" x2="700" y2="145" stroke="#334155" stroke-width="0.8"/>
+
+  <!-- Main title -->
+  <text x="540" y="280" text-anchor="middle" font-size="100" font-weight="bold" fill="white"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif">❄ Task</text>
+
+  <!-- Tagline -->
+  <text x="540" y="350" text-anchor="middle" font-size="22" fill="#94a3b8"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif">推しキャラといっしょに、今日もやることをこなそう</text>
+
+  <!-- Feature pills -->
+  <rect x="148" y="402" width="188" height="46" rx="23" fill="#93c5fd" fill-opacity="0.12" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="242" y="431" text-anchor="middle" font-size="17" fill="#93c5fd"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">タスク管理</text>
+
+  <rect x="356" y="402" width="148" height="46" rx="23" fill="#fca5a5" fill-opacity="0.12" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="430" y="431" text-anchor="middle" font-size="17" fill="#fca5a5"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">❄ ゲーム</text>
+
+  <rect x="524" y="402" width="210" height="46" rx="23" fill="#fde68a" fill-opacity="0.10" stroke="#fde68a" stroke-width="1.5"/>
+  <text x="629" y="431" text-anchor="middle" font-size="17" fill="#fde68a"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">コンテンツ解放</text>
+
+  <rect x="754" y="402" width="136" height="46" rx="23" fill="#cbd5e1" fill-opacity="0.08" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="822" y="431" text-anchor="middle" font-size="17" fill="#cbd5e1"
+        font-family="'Arial', sans-serif">PWA対応</text>
+
+  <!-- Characters label -->
+  <text x="540" y="520" text-anchor="middle" font-size="13" letter-spacing="4"
+        fill="#334155" font-family="'Arial', sans-serif">CHARACTERS</text>
+  <line x1="180" y1="532" x2="900" y2="532" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Character cards -->
+  <!-- Hinata -->
+  <rect x="100" y="548" width="258" height="344" rx="14"
+        fill="#93c5fd" fill-opacity="0.07" stroke="#93c5fd" stroke-width="1.2" stroke-opacity="0.5"/>
+  <image href="../chara_hinata.png" x="100" y="548" width="258" height="344"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#cp1)"/>
+  <rect x="100" y="856" width="258" height="36" rx="7" fill="#0c1220" fill-opacity="0.85"/>
+  <text x="229" y="880" text-anchor="middle" font-size="18" font-weight="bold" fill="#93c5fd"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">ヒナタ</text>
+
+  <!-- Kouta -->
+  <rect x="411" y="548" width="258" height="344" rx="14"
+        fill="#fca5a5" fill-opacity="0.07" stroke="#fca5a5" stroke-width="1.2" stroke-opacity="0.5"/>
+  <image href="../chara_kouta.png" x="411" y="548" width="258" height="344"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#cp2)"/>
+  <rect x="411" y="856" width="258" height="36" rx="7" fill="#0c1220" fill-opacity="0.85"/>
+  <text x="540" y="880" text-anchor="middle" font-size="18" font-weight="bold" fill="#fca5a5"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">コウタ</text>
+
+  <!-- Hayate -->
+  <rect x="722" y="548" width="258" height="344" rx="14"
+        fill="#fde68a" fill-opacity="0.07" stroke="#fde68a" stroke-width="1.2" stroke-opacity="0.5"/>
+  <image href="../chara_hayate.png" x="722" y="548" width="258" height="344"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#cp3)"/>
+  <rect x="722" y="856" width="258" height="36" rx="7" fill="#0c1220" fill-opacity="0.85"/>
+  <text x="851" y="880" text-anchor="middle" font-size="18" font-weight="bold" fill="#fde68a"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">ハヤテ</text>
+
+  <!-- URL -->
+  <text x="540" y="945" text-anchor="middle" font-size="14" fill="#475569"
+        font-family="'Arial','Courier New',monospace">sunnyplace25.github.io/taskpwa</text>
+
+  <!-- Bottom 3-color bar -->
+  <rect x="0"   y="970" width="360" height="7" fill="#93c5fd"/>
+  <rect x="360" y="970" width="360" height="7" fill="#fca5a5"/>
+  <rect x="720" y="970" width="360" height="7" fill="#fde68a"/>
+
+  <!-- Character name labels -->
+  <text x="180" y="1002" text-anchor="middle" font-size="12" fill="#93c5fd" letter-spacing="2"
+        font-family="'Arial', sans-serif">HINATA</text>
+  <text x="540" y="1002" text-anchor="middle" font-size="12" fill="#fca5a5" letter-spacing="2"
+        font-family="'Arial', sans-serif">KOUTA</text>
+  <text x="900" y="1002" text-anchor="middle" font-size="12" fill="#fde68a" letter-spacing="2"
+        font-family="'Arial', sans-serif">HAYATE</text>
+
+  <!-- Brand footer -->
+  <text x="540" y="1055" text-anchor="middle" font-size="11" fill="#2d3748" letter-spacing="4"
+        font-family="'Arial', sans-serif">Snow flakes / 山吹ことり</text>
+</svg>

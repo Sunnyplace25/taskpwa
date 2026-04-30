@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>❄ ゲーム | Snow flakes Task</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --accent: #fca5a5;
+      --bg: #0c1220; --text: #e2e8f0; --muted: #64748b;
+      --card: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif;
+      overflow-x: hidden;
+    }
+    #snow { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35; }
+    section { position: relative; z-index: 1; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(12,18,32,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back { font-size: 14px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+    .nav-back:hover { color: var(--accent); }
+    .nav-label { font-size: 12px; letter-spacing: 5px; color: var(--muted); }
+    .nav-cta { padding: 8px 22px; border-radius: 100px; background: rgba(252,165,165,0.1); border: 1.5px solid var(--accent); color: var(--accent); font-size: 14px; text-decoration: none; }
+    .nav-cta:hover { background: rgba(252,165,165,0.2); }
+
+    .hero {
+      padding: 160px 24px 80px; text-align: center;
+      background: radial-gradient(ellipse at center top, rgba(252,165,165,0.1) 0%, transparent 60%);
+    }
+    .hero-icon { font-size: 64px; margin-bottom: 24px; }
+    .hero-label { font-size: 11px; letter-spacing: 7px; color: var(--muted); margin-bottom: 16px; }
+    .hero-title { font-size: clamp(48px, 8vw, 72px); font-weight: bold; color: white; margin-bottom: 20px; }
+    .hero-desc  { font-size: 18px; color: #94a3b8; max-width: 560px; margin: 0 auto 48px; line-height: 1.8; }
+
+    /* Flow section */
+    .flow { padding: 80px 24px; }
+    .flow-inner { max-width: 720px; margin: 0 auto; }
+    .sec-label { font-size: 11px; letter-spacing: 7px; color: var(--muted); text-align: center; margin-bottom: 48px; display: block; }
+    .flow-item {
+      display: flex; align-items: flex-start; gap: 24px;
+      padding: 28px; margin-bottom: 16px;
+      border-radius: 18px; background: var(--card);
+      border: 1px solid rgba(252,165,165,0.15);
+      transition: transform 0.2s;
+    }
+    .flow-item:hover { transform: translateX(4px); }
+    .flow-num {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+      border: 1.5px solid rgba(252,165,165,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: bold; color: var(--accent);
+    }
+    .flow-text { flex: 1; }
+    .flow-name { font-size: 18px; font-weight: bold; color: white; margin-bottom: 6px; }
+    .flow-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+    /* Threshold section */
+    .threshold { padding: 0 24px 80px; }
+    .th-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px; max-width: 720px; margin: 0 auto;
+    }
+    .th-card {
+      padding: 28px; border-radius: 18px;
+      background: var(--card); border: 1px solid var(--border);
+    }
+    .th-title { font-size: 14px; color: var(--muted); margin-bottom: 16px; letter-spacing: 2px; }
+    .th-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .th-row:last-child { border-bottom: none; }
+    .th-num  { font-size: 22px; font-weight: bold; color: var(--accent); }
+    .th-what { font-size: 14px; color: var(--muted); }
+
+    /* Characters in game */
+    .game-chars { padding: 0 24px 80px; text-align: center; }
+    .char-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .char-chip {
+      padding: 12px 24px; border-radius: 100px;
+      border: 1.5px solid; font-size: 16px; font-weight: bold;
+    }
+
+    .cta-sec { padding: 80px 24px; text-align: center; }
+    .cta {
+      display: inline-block; padding: 18px 52px; border-radius: 100px;
+      background: linear-gradient(135deg, #93c5fd, #fca5a5);
+      color: #0f172a; font-size: 18px; font-weight: bold;
+      text-decoration: none; transition: opacity 0.2s, transform 0.2s;
+    }
+    .cta:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .color-bar { height: 4px; display: flex; }
+    .cb1 { flex:1; background: #93c5fd; } .cb2 { flex:1; background: #fca5a5; } .cb3 { flex:1; background: #fde68a; }
+    footer { padding: 36px 24px; text-align: center; }
+    footer p { font-size: 12px; color: #1e293b; letter-spacing: 4px; }
+
+    @media (max-width: 600px) { nav { padding: 14px 20px; } .nav-label { display: none; } }
+  </style>
+</head>
+<body>
+<canvas id="snow"></canvas>
+
+<nav>
+  <a class="nav-back" href="index.html">← もどる</a>
+  <span class="nav-label">SNOW FLAKES TASK</span>
+  <a class="nav-cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-icon">❄</div>
+  <p class="hero-label">FEATURE 02</p>
+  <h1 class="hero-title">❄ ゲーム</h1>
+  <p class="hero-desc">ぷよぷよ風のゲームで雪の玉を積み上げよう。<br>集めた❄がコンテンツを解放していく。</p>
+</section>
+
+<section class="flow">
+  <span class="sec-label">HOW TO PLAY</span>
+  <div class="flow-inner">
+    <div class="flow-item">
+      <div class="flow-num">1</div>
+      <div class="flow-text">
+        <p class="flow-name">❄を落として積む</p>
+        <p class="flow-desc">降ってくる❄の玉をタップやスワイプで操作して積み上げよう。同じ色が4つ並ぶと消える。</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-num">2</div>
+      <div class="flow-text">
+        <p class="flow-name">❄カウントを貯める</p>
+        <p class="flow-desc">消すたびに❄カウントが増えていく。カウントが一定数に達すると鍵が解放される。</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-num">3</div>
+      <div class="flow-text">
+        <p class="flow-name">キーワード解放</p>
+        <p class="flow-desc">解放された鍵を使ってキーワードを入力すると、キャラのイラスト・エピソード・音楽が開放される。</p>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-num">4</div>
+      <div class="flow-text">
+        <p class="flow-name">スペシャル背景も解放</p>
+        <p class="flow-desc">3つのキーワードをすべて解放するとスペシャルなスイーツ背景がアプリの背景に登場。その後、カウントがリセットされてまた集め直しになる。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="threshold">
+  <span class="sec-label">❄ THRESHOLDS</span>
+  <div class="th-grid">
+    <div class="th-card">
+      <p class="th-title">1周目（解放前）</p>
+      <div class="th-row"><span class="th-num">30</span><span class="th-what">1つ目の鍵</span></div>
+      <div class="th-row"><span class="th-num">65</span><span class="th-what">2つ目の鍵</span></div>
+      <div class="th-row"><span class="th-num">100</span><span class="th-what">3つ目の鍵</span></div>
+    </div>
+    <div class="th-card">
+      <p class="th-title">2周目以降</p>
+      <div class="th-row"><span class="th-num">50</span><span class="th-what">1つ目の鍵</span></div>
+      <div class="th-row"><span class="th-num">100</span><span class="th-what">2つ目の鍵</span></div>
+      <div class="th-row"><span class="th-num">150</span><span class="th-what">3つ目の鍵</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="game-chars">
+  <span class="sec-label">SELECT CHARACTER</span>
+  <div class="char-row">
+    <span class="char-chip" style="color:#93c5fd;border-color:#93c5fd;background:rgba(147,197,253,0.08)">ヒナタ</span>
+    <span class="char-chip" style="color:#fca5a5;border-color:#fca5a5;background:rgba(252,165,165,0.08)">コウタ</span>
+    <span class="char-chip" style="color:#fde68a;border-color:#fde68a;background:rgba(253,230,138,0.06)">ハヤテ</span>
+    <span class="char-chip" style="color:#e2e8f0;border-color:#334155;background:rgba(255,255,255,0.04)">❄ 箱推し</span>
+  </div>
+</section>
+
+<section class="cta-sec">
+  <a class="cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">ゲームをやってみる →</a>
+</section>
+
+<div class="color-bar"><span class="cb1"></span><span class="cb2"></span><span class="cb3"></span></div>
+<footer><p>SNOW FLAKES / 山吹ことり</p></footer>
+
+<script>
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  const flakes = Array.from({length: 60}, () => ({
+    x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+    r: Math.random()*1.6+0.4, speed: Math.random()*0.5+0.15,
+    drift: (Math.random()-0.5)*0.25
+  }));
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    for (const f of flakes) {
+      ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI*2); ctx.fill();
+      f.y += f.speed; f.x += f.drift;
+      if (f.y > canvas.height+4) { f.y = -4; f.x = Math.random()*canvas.width; }
+      if (f.x < -4) f.x = canvas.width+4;
+      if (f.x > canvas.width+4) f.x = -4;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

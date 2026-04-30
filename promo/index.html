@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Snow flakes Task">
+  <meta property="og:description" content="推しキャラといっしょに、今日もやることをこなそう">
+  <title>Snow flakes Task | アプリ紹介</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --hinata: #93c5fd;
+      --kouta:  #fca5a5;
+      --hayate: #fde68a;
+      --bg:     #0c1220;
+      --bg2:    #111827;
+      --text:   #e2e8f0;
+      --muted:  #64748b;
+      --card:   rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── Snow canvas ── */
+    #snow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+    }
+
+    /* ── Layout ── */
+    section { position: relative; z-index: 1; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(12,18,32,0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-size: 13px;
+      letter-spacing: 6px;
+      color: var(--muted);
+    }
+    .nav-cta {
+      padding: 8px 24px;
+      border-radius: 100px;
+      background: rgba(147,197,253,0.12);
+      border: 1.5px solid var(--hinata);
+      color: var(--hinata);
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: rgba(147,197,253,0.22); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      background:
+        radial-gradient(ellipse at 20% 40%, rgba(147,197,253,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 60%, rgba(252,165,165,0.06) 0%, transparent 60%);
+    }
+    .hero-label {
+      font-size: 12px;
+      letter-spacing: 8px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .hero-title {
+      font-size: clamp(72px, 12vw, 110px);
+      font-weight: bold;
+      color: white;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+    .hero-tagline {
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: #94a3b8;
+      margin-bottom: 48px;
+    }
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 56px;
+    }
+    .pill {
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 15px;
+      border: 1.5px solid;
+      transition: transform 0.15s;
+    }
+    .pill:hover { transform: translateY(-2px); }
+    a.pill { text-decoration: none; }
+    .pill-b { color: var(--hinata); border-color: var(--hinata); background: rgba(147,197,253,0.08); }
+    .pill-r { color: var(--kouta);  border-color: var(--kouta);  background: rgba(252,165,165,0.08); }
+    .pill-y { color: var(--hayate); border-color: var(--hayate); background: rgba(253,230,138,0.06); }
+    .pill-g { color: #94a3b8;       border-color: #334155;       background: rgba(148,163,184,0.05); }
+
+    .cta {
+      display: inline-block;
+      padding: 18px 52px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, var(--hinata) 0%, var(--kouta) 100%);
+      color: #0f172a;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 8px 30px rgba(147,197,253,0.25);
+    }
+    .cta:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .scroll-hint {
+      margin-top: 72px;
+      font-size: 12px;
+      color: #334155;
+      letter-spacing: 3px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* ── Section header ── */
+    .sec-head {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .sec-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 7px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .sec-title {
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: bold;
+      color: white;
+    }
+
+    /* ── Characters ── */
+    .characters {
+      padding: 100px 24px;
+    }
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .char-card {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.08);
+      background: var(--card);
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: default;
+    }
+    .char-card:hover { transform: translateY(-6px); }
+    .char-card.h { border-color: rgba(147,197,253,0.35); }
+    .char-card.k { border-color: rgba(252,165,165,0.35); }
+    .char-card.y { border-color: rgba(253,230,138,0.35); }
+    .char-card.h:hover { box-shadow: 0 16px 40px rgba(147,197,253,0.15); }
+    .char-card.k:hover { box-shadow: 0 16px 40px rgba(252,165,165,0.15); }
+    .char-card.y:hover { box-shadow: 0 16px 40px rgba(253,230,138,0.12); }
+    .char-img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: rgba(0,0,0,0.2);
+    }
+    .char-info { padding: 20px; }
+    .char-num  { font-size: 11px; letter-spacing: 3px; color: var(--muted); margin-bottom: 6px; }
+    .char-name { font-size: 24px; font-weight: bold; margin-bottom: 4px; }
+    .char-role { font-size: 13px; color: var(--muted); }
+
+    /* ── Features ── */
+    .features {
+      padding: 100px 24px;
+      background: rgba(255,255,255,0.02);
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    a.feature-card {
+      display: block; text-decoration: none; color: inherit;
+      padding: 32px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    a.feature-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+    .feature-icon { font-size: 30px; margin-bottom: 16px; }
+    .feature-name { font-size: 18px; font-weight: bold; color: white; margin-bottom: 10px; }
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
+    .feature-more { font-size: 13px; color: #475569; }
+    a.feature-card:hover .feature-more { color: var(--text); }
+
+    /* ── Install ── */
+    .install {
+      padding: 100px 24px;
+      text-align: center;
+    }
+    .install-title { font-size: clamp(26px, 4vw, 38px); font-weight: bold; color: white; margin-bottom: 12px; }
+    .install-sub   { font-size: 16px; color: var(--muted); margin-bottom: 56px; }
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 0 32px;
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -2px;
+      top: 22px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #334155;
+    }
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1.5px solid #334155;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: bold; color: #64748b;
+    }
+    .step-text { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 140px; }
+
+    /* ── Color bar ── */
+    .color-bar { height: 5px; display: flex; }
+    .color-bar span { flex: 1; }
+    .color-bar .cb1 { background: var(--hinata); }
+    .color-bar .cb2 { background: var(--kouta); }
+    .color-bar .cb3 { background: var(--hayate); }
+
+    /* ── Footer ── */
+    footer {
+      padding: 48px 24px 56px;
+      text-align: center;
+    }
+    .footer-brand { font-size: 12px; letter-spacing: 6px; color: #1e293b; margin-bottom: 12px; }
+    .footer-copy  { font-size: 12px; color: #1e293b; }
+
+    /* ── Mobile ── */
+    @media (max-width: 680px) {
+      nav { padding: 14px 20px; }
+      .char-grid { grid-template-columns: 1fr; max-width: 300px; margin: 0 auto; }
+      .step { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="snow"></canvas>
+
+<!-- Nav -->
+<nav>
+  <span class="nav-brand">SNOW FLAKES</span>
+  <a class="nav-cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <p class="hero-label">SNOW FLAKES</p>
+  <h1 class="hero-title">❄ Task</h1>
+  <p class="hero-tagline">推しキャラといっしょに、今日もやることをこなそう</p>
+  <div class="hero-pills">
+    <a class="pill pill-b" href="feature_tasks.html">タスク管理</a>
+    <a class="pill pill-r" href="feature_game.html">❄ ゲーム</a>
+    <a class="pill pill-y" href="feature_content.html">コンテンツ解放</a>
+    <a class="pill pill-g" href="feature_pwa.html">PWA対応</a>
+  </div>
+  <a class="cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く &rarr;</a>
+  <p class="scroll-hint">↓ scroll</p>
+</section>
+
+<!-- Characters -->
+<section class="characters">
+  <div class="sec-head">
+    <span class="sec-label">CHARACTERS</span>
+    <h2 class="sec-title">3人のキャラクター</h2>
+  </div>
+  <div class="char-grid">
+    <div class="char-card h">
+      <img class="char-img" src="../chara_hinata.png" alt="ヒナタ">
+      <div class="char-info">
+        <p class="char-num">01</p>
+        <p class="char-name" style="color:var(--hinata)">ヒナタ</p>
+        <p class="char-role">Guitar &amp; Vocal / 黒髪</p>
+      </div>
+    </div>
+    <div class="char-card k">
+      <img class="char-img" src="../chara_kouta.png" alt="コウタ">
+      <div class="char-info">
+        <p class="char-num">02</p>
+        <p class="char-name" style="color:var(--kouta)">コウタ</p>
+        <p class="char-role">Bass / 赤髪</p>
+      </div>
+    </div>
+    <div class="char-card y">
+      <img class="char-img" src="../chara_hayate.png" alt="ハヤテ">
+      <div class="char-info">
+        <p class="char-num">03</p>
+        <p class="char-name" style="color:var(--hayate)">ハヤテ</p>
+        <p class="char-role">Drums / 金髪</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features">
+  <div class="sec-head">
+    <span class="sec-label">FEATURES</span>
+    <h2 class="sec-title">できること</h2>
+  </div>
+  <div class="feature-grid">
+    <a class="feature-card" href="feature_tasks.html">
+      <div class="feature-icon">📋</div>
+      <p class="feature-name">タスク管理</p>
+      <p class="feature-desc">今日・今週・すべてのタスクを一覧で管理。優先度・繰り返し・期限通知に対応。</p>
+      <p class="feature-more">詳しく →</p>
+    </a>
+    <a class="feature-card" href="feature_game.html">
+      <div class="feature-icon">❄</div>
+      <p class="feature-name">❄ ゲーム</p>
+      <p class="feature-desc">ぷよぷよ風のゲームで雪を集めよう。溜めるとキーワードの鍵が順番に解放される。</p>
+      <p class="feature-more">詳しく →</p>
+    </a>
+    <a class="feature-card" href="feature_content.html">
+      <div class="feature-icon">📖</div>
+      <p class="feature-name">エピソード</p>
+      <p class="feature-desc">スペシャルコードでキャラのエピソードを解放。1日1話ずつ読み進めよう。</p>
+      <p class="feature-more">詳しく →</p>
+    </a>
+    <a class="feature-card" href="feature_content.html">
+      <div class="feature-icon">🎵</div>
+      <p class="feature-name">ミュージック</p>
+      <p class="feature-desc">エピソードを読んだあとに楽曲が解放。SWEETs 各ボーカルバージョンをアプリ内で再生。</p>
+      <p class="feature-more">詳しく →</p>
+    </a>
+    <a class="feature-card" href="feature_content.html">
+      <div class="feature-icon">🌟</div>
+      <p class="feature-name">スペシャル背景</p>
+      <p class="feature-desc">ゲームで雪を集めるとスイーツ背景が解放。推しを選べばその背景がランダムで登場。</p>
+      <p class="feature-more">詳しく →</p>
+    </a>
+    <a class="feature-card" href="feature_pwa.html">
+      <div class="feature-icon">📱</div>
+      <p class="feature-name">PWA対応</p>
+      <p class="feature-desc">ブラウザからホーム画面に追加できる。インストール不要でオフラインでも使える。</p>
+      <p class="feature-more">詳しく →</p>
+    </a>
+  </div>
+</section>
+
+<!-- Install -->
+<section class="install">
+  <div class="sec-head">
+    <span class="sec-label">INSTALL</span>
+    <h2 class="install-title">インストール不要</h2>
+  </div>
+  <p class="install-sub">ブラウザで開いてホーム画面に追加するだけ</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <p class="step-text">下のリンクをブラウザで開く</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <p class="step-text">「ホーム画面に追加」をタップ</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <p class="step-text">アイコンから起動する</p>
+    </div>
+  </div>
+  <a class="cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く &rarr;</a>
+</section>
+
+<!-- Footer -->
+<div class="color-bar">
+  <span class="cb1"></span>
+  <span class="cb2"></span>
+  <span class="cb3"></span>
+</div>
+<footer>
+  <p class="footer-brand">SNOW FLAKES</p>
+  <p class="footer-copy">山吹ことり</p>
+</footer>
+
+<script>
+  // ── Snow ──
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  let flakes = [];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  for (let i = 0; i < 70; i++) {
+    flakes.push({
+      x:     Math.random() * canvas.width,
+      y:     Math.random() * canvas.height,
+      r:     Math.random() * 1.8 + 0.4,
+      speed: Math.random() * 0.5 + 0.15,
+      drift: (Math.random() - 0.5) * 0.25,
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    for (const f of flakes) {
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fill();
+      f.y += f.speed;
+      f.x += f.drift;
+      if (f.y > canvas.height + 4) { f.y = -4; f.x = Math.random() * canvas.width; }
+      if (f.x < -4) f.x = canvas.width + 4;
+      if (f.x > canvas.width + 4) f.x = -4;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+
+</body>
+</html>

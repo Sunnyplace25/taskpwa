@@ -1,0 +1,142 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="720" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c1220"/>
+      <stop offset="100%" stop-color="#1a1640"/>
+    </linearGradient>
+    <linearGradient id="gHinata" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#93c5fd" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="gKouta" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#fca5a5" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fca5a5" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="gHayate" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.04"/>
+    </linearGradient>
+    <clipPath id="ch"><rect x="820" y="80"  width="140" height="200" rx="12"/></clipPath>
+    <clipPath id="ck"><rect x="980" y="80"  width="140" height="200" rx="12"/></clipPath>
+    <clipPath id="cy"><rect x="1100" y="80" width="150" height="200" rx="12"/></clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="720" fill="url(#bg)"/>
+
+  <!-- Snow particles -->
+  <g fill="white" opacity="0.3">
+    <circle cx="70"   cy="40"  r="2"/>
+    <circle cx="200"  cy="72"  r="1.5"/>
+    <circle cx="360"  cy="28"  r="2.5"/>
+    <circle cx="520"  cy="60"  r="1.5"/>
+    <circle cx="680"  cy="22"  r="2"/>
+    <circle cx="840"  cy="50"  r="1.5"/>
+    <circle cx="1000" cy="35"  r="2"/>
+    <circle cx="1150" cy="65"  r="1.5"/>
+    <circle cx="1260" cy="30"  r="2"/>
+    <circle cx="28"   cy="200" r="1.5"/>
+    <circle cx="42"   cy="420" r="2"/>
+    <circle cx="22"   cy="600" r="1.5"/>
+    <circle cx="1258" cy="180" r="2"/>
+    <circle cx="1268" cy="400" r="1.5"/>
+    <circle cx="1252" cy="600" r="2"/>
+    <circle cx="300"  cy="700" r="1.5"/>
+    <circle cx="600"  cy="710" r="2"/>
+    <circle cx="900"  cy="704" r="1.5"/>
+    <circle cx="1100" cy="712" r="2"/>
+  </g>
+
+  <!-- Large decorative ❄ -->
+  <text x="18"  y="120" font-size="80" fill="#93c5fd" opacity="0.06" font-family="sans-serif">❄</text>
+  <text x="1180" y="650" font-size="90" fill="#fde68a" opacity="0.05" font-family="sans-serif">❄</text>
+
+  <!-- Left: Brand + Title area -->
+  <!-- Brand label -->
+  <text x="80" y="108" font-size="13" letter-spacing="8" fill="#475569"
+        font-family="'Arial', sans-serif">SNOW FLAKES</text>
+  <line x1="80" y1="122" x2="380" y2="122" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Main title -->
+  <text x="80" y="260" font-size="108" font-weight="bold" fill="white"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif">❄ Task</text>
+
+  <!-- Tagline -->
+  <text x="82" y="316" font-size="20" fill="#94a3b8"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif">推しキャラといっしょに、タスクをこなそう</text>
+
+  <!-- Feature list (left side) -->
+  <g font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif" font-size="17">
+    <!-- タスク管理 -->
+    <circle cx="96" cy="378" r="5" fill="#93c5fd"/>
+    <text x="116" y="383" fill="#cbd5e1">タスク管理・通知・繰り返し設定</text>
+    <!-- ゲーム -->
+    <circle cx="96" cy="418" r="5" fill="#fca5a5"/>
+    <text x="116" y="423" fill="#cbd5e1">❄ゲームでコンテンツ解放</text>
+    <!-- エピソード・音楽 -->
+    <circle cx="96" cy="458" r="5" fill="#fde68a"/>
+    <text x="116" y="463" fill="#cbd5e1">エピソード・ミュージック・スペシャル背景</text>
+    <!-- PWA -->
+    <circle cx="96" cy="498" r="5" fill="#6ee7b7"/>
+    <text x="116" y="503" fill="#cbd5e1">PWA対応｜ホーム画面から起動</text>
+  </g>
+
+  <!-- URL -->
+  <text x="82" y="578" font-size="15" fill="#334155"
+        font-family="'Arial','Courier New',monospace">sunnyplace25.github.io/taskpwa</text>
+
+  <!-- Right: Character portraits -->
+  <!-- Hinata card -->
+  <rect x="820" y="70" width="140" height="210" rx="12"
+        fill="url(#gHinata)" stroke="#93c5fd" stroke-width="1.2" stroke-opacity="0.5"/>
+  <image href="../chara_hinata.png" x="820" y="70" width="140" height="210"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#ch)"/>
+  <rect x="820" y="244" width="140" height="36" rx="6" fill="#0c1220" fill-opacity="0.85"/>
+  <text x="890" y="268" text-anchor="middle" font-size="16" font-weight="bold" fill="#93c5fd"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">ヒナタ</text>
+
+  <!-- Kouta card -->
+  <rect x="975" y="70" width="140" height="210" rx="12"
+        fill="url(#gKouta)" stroke="#fca5a5" stroke-width="1.2" stroke-opacity="0.5"/>
+  <image href="../chara_kouta.png" x="975" y="70" width="140" height="210"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#ck)"/>
+  <rect x="975" y="244" width="140" height="36" rx="6" fill="#0c1220" fill-opacity="0.85"/>
+  <text x="1045" y="268" text-anchor="middle" font-size="16" font-weight="bold" fill="#fca5a5"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">コウタ</text>
+
+  <!-- Hayate card -->
+  <rect x="1130" y="70" width="140" height="210" rx="12"
+        fill="url(#gHayate)" stroke="#fde68a" stroke-width="1.2" stroke-opacity="0.5"/>
+  <image href="../chara_hayate.png" x="1130" y="70" width="140" height="210"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#cy)"/>
+  <rect x="1130" y="244" width="140" height="36" rx="6" fill="#0c1220" fill-opacity="0.85"/>
+  <text x="1200" y="268" text-anchor="middle" font-size="16" font-weight="bold" fill="#fde68a"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">ハヤテ</text>
+
+  <!-- Right side lower: App tag -->
+  <rect x="820" y="340" width="450" height="200" rx="16"
+        fill="white" fill-opacity="0.03" stroke="#1e293b" stroke-width="1"/>
+
+  <text x="840" y="376" font-size="14" letter-spacing="2" fill="#475569"
+        font-family="'Arial', sans-serif">APP FEATURES</text>
+
+  <g font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif" font-size="15" fill="#64748b">
+    <text x="840" y="408">推しキャラ選択・スペシャル背景</text>
+    <text x="840" y="436">1日1話のエピソード解放</text>
+    <text x="840" y="464">SWEETs 各ボーカルバージョン再生</text>
+    <text x="840" y="492">オフライン対応（PWA）</text>
+  </g>
+
+  <!-- Bottom bar -->
+  <rect x="0"   y="676" width="427" height="6" fill="#93c5fd"/>
+  <rect x="427" y="676" width="426" height="6" fill="#fca5a5"/>
+  <rect x="853" y="676" width="427" height="6" fill="#fde68a"/>
+
+  <!-- Bottom labels -->
+  <text x="213"  y="708" text-anchor="middle" font-size="11" letter-spacing="2" fill="#93c5fd"
+        font-family="'Arial', sans-serif">HINATA</text>
+  <text x="640"  y="708" text-anchor="middle" font-size="11" letter-spacing="2" fill="#fca5a5"
+        font-family="'Arial', sans-serif">KOUTA</text>
+  <text x="1066" y="708" text-anchor="middle" font-size="11" letter-spacing="2" fill="#fde68a"
+        font-family="'Arial', sans-serif">HAYATE</text>
+</svg>

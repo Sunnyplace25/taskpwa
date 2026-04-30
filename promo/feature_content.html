@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コンテンツ解放 | Snow flakes Task</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --accent: #fde68a; --accent2: #fb923c;
+      --bg: #0c1220; --text: #e2e8f0; --muted: #64748b;
+      --card: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif;
+      overflow-x: hidden;
+    }
+    #snow { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35; }
+    section { position: relative; z-index: 1; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(12,18,32,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back { font-size: 14px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+    .nav-back:hover { color: var(--accent); }
+    .nav-label { font-size: 12px; letter-spacing: 5px; color: var(--muted); }
+    .nav-cta { padding: 8px 22px; border-radius: 100px; background: rgba(253,230,138,0.08); border: 1.5px solid var(--accent); color: var(--accent); font-size: 14px; text-decoration: none; }
+    .nav-cta:hover { background: rgba(253,230,138,0.18); }
+
+    .hero {
+      padding: 160px 24px 80px; text-align: center;
+      background: radial-gradient(ellipse at center top, rgba(253,230,138,0.08) 0%, transparent 60%);
+    }
+    .hero-icon { font-size: 64px; margin-bottom: 24px; }
+    .hero-label { font-size: 11px; letter-spacing: 7px; color: var(--muted); margin-bottom: 16px; }
+    .hero-title { font-size: clamp(40px, 7vw, 64px); font-weight: bold; color: white; margin-bottom: 20px; }
+    .hero-desc  { font-size: 18px; color: #94a3b8; max-width: 560px; margin: 0 auto; line-height: 1.8; }
+
+    /* Timeline / steps */
+    .timeline { padding: 80px 24px; }
+    .sec-label { font-size: 11px; letter-spacing: 7px; color: var(--muted); text-align: center; margin-bottom: 56px; display: block; }
+    .tl { max-width: 680px; margin: 0 auto; }
+    .tl-item {
+      display: flex; gap: 24px; margin-bottom: 0;
+      position: relative;
+    }
+    .tl-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 21px; top: 48px; bottom: -16px;
+      width: 2px; background: rgba(253,230,138,0.15);
+    }
+    .tl-left { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+    .tl-dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 2px solid rgba(253,230,138,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: bold; color: var(--accent);
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+    .tl-right { flex: 1; padding-bottom: 40px; }
+    .tl-name { font-size: 20px; font-weight: bold; color: white; margin-bottom: 8px; margin-top: 8px; }
+    .tl-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
+    .tl-tag {
+      display: inline-block; margin-top: 12px;
+      padding: 4px 14px; border-radius: 100px;
+      background: rgba(253,230,138,0.07); border: 1px solid rgba(253,230,138,0.3);
+      font-size: 12px; color: var(--accent);
+    }
+
+    /* Content types */
+    .content-types { padding: 0 24px 80px; }
+    .type-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px; max-width: 900px; margin: 0 auto;
+    }
+    .type-card {
+      padding: 28px; border-radius: 18px;
+      background: var(--card); border: 1px solid var(--border);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .type-card:hover { transform: translateY(-3px); border-color: rgba(253,230,138,0.25); }
+    .type-icon { font-size: 32px; margin-bottom: 14px; }
+    .type-name { font-size: 18px; font-weight: bold; color: white; margin-bottom: 8px; }
+    .type-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+    .cta-sec { padding: 80px 24px; text-align: center; }
+    .cta {
+      display: inline-block; padding: 18px 52px; border-radius: 100px;
+      background: linear-gradient(135deg, #fde68a, #fb923c);
+      color: #0f172a; font-size: 18px; font-weight: bold;
+      text-decoration: none; transition: opacity 0.2s, transform 0.2s;
+    }
+    .cta:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .color-bar { height: 4px; display: flex; }
+    .cb1{flex:1;background:#93c5fd;} .cb2{flex:1;background:#fca5a5;} .cb3{flex:1;background:#fde68a;}
+    footer { padding: 36px 24px; text-align: center; }
+    footer p { font-size: 12px; color: #1e293b; letter-spacing: 4px; }
+
+    @media (max-width: 600px) { nav { padding: 14px 20px; } .nav-label { display: none; } }
+  </style>
+</head>
+<body>
+<canvas id="snow"></canvas>
+
+<nav>
+  <a class="nav-back" href="index.html">← もどる</a>
+  <span class="nav-label">SNOW FLAKES TASK</span>
+  <a class="nav-cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-icon">🎁</div>
+  <p class="hero-label">FEATURE 03</p>
+  <h1 class="hero-title">コンテンツ解放</h1>
+  <p class="hero-desc">スペシャルコードやゲームで、キャラのエピソード・音楽・特別な背景を少しずつ解放していく。</p>
+</section>
+
+<section class="timeline">
+  <span class="sec-label">UNLOCK FLOW</span>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">1</div></div>
+      <div class="tl-right">
+        <p class="tl-name">スペシャルコードを入力</p>
+        <p class="tl-desc">キャラクターのイラストが解放される。コードは小説・SNSなどから探そう。</p>
+        <span class="tl-tag">キャラ解放</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">2</div></div>
+      <div class="tl-right">
+        <p class="tl-name">エピソードコードを入力</p>
+        <p class="tl-desc">キャラクターのエピソードが解放される。同じコードで3つ全員分を解放できる。</p>
+        <span class="tl-tag">エピソード解放</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">3</div></div>
+      <div class="tl-right">
+        <p class="tl-name">1日1話ずつ読む</p>
+        <p class="tl-desc">解放されたエピソードは1日1話だけ読める。毎日アプリを開くきっかけに。</p>
+        <span class="tl-tag">1日1話制限</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">4</div></div>
+      <div class="tl-right">
+        <p class="tl-name">ミュージック解放</p>
+        <p class="tl-desc">ゲームで❄を集めてキーワードを解放し、エピソードも読み終わると楽曲が解放される。</p>
+        <span class="tl-tag">🎵 楽曲解放</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">5</div></div>
+      <div class="tl-right">
+        <p class="tl-name">スペシャル背景が登場</p>
+        <p class="tl-desc">ゲームで3つのキーワードをすべて解放すると、推しのスイーツ背景がアプリの背景に現れる。</p>
+        <span class="tl-tag">🌟 背景解放</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-types">
+  <span class="sec-label">CONTENT</span>
+  <div class="type-grid">
+    <div class="type-card">
+      <div class="type-icon">🖼️</div>
+      <p class="type-name">キャラクターイラスト</p>
+      <p class="type-desc">ヒナタ・コウタ・ハヤテのイラストが解放される。ギャラリーでまとめて確認できる。</p>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">📖</div>
+      <p class="type-name">キャラエピソード</p>
+      <p class="type-desc">各キャラクターのエピソードを読める。1日1話のペースで読み進めよう。</p>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">🎵</div>
+      <p class="type-name">ミュージック</p>
+      <p class="type-desc">SWEETs 各ボーカルバージョン（ヒナタ・コウタ・ハヤテ）をアプリ内で再生できる。</p>
+    </div>
+    <div class="type-card">
+      <div class="type-icon">🌟</div>
+      <p class="type-name">スペシャル背景</p>
+      <p class="type-desc">スイーツテーマの特別な背景。推し別に解放され、通常背景と一緒にランダム表示される。</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec">
+  <a class="cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く →</a>
+</section>
+
+<div class="color-bar"><span class="cb1"></span><span class="cb2"></span><span class="cb3"></span></div>
+<footer><p>SNOW FLAKES / 山吹ことり</p></footer>
+
+<script>
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  const flakes = Array.from({length: 60}, () => ({
+    x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+    r: Math.random()*1.6+0.4, speed: Math.random()*0.5+0.15,
+    drift: (Math.random()-0.5)*0.25
+  }));
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#fff';
+    for (const f of flakes) {
+      ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fill();
+      f.y+=f.speed; f.x+=f.drift;
+      if(f.y>canvas.height+4){f.y=-4;f.x=Math.random()*canvas.width;}
+      if(f.x<-4)f.x=canvas.width+4;
+      if(f.x>canvas.width+4)f.x=-4;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

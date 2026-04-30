@@ -1,0 +1,158 @@
+<svg width="1080" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c1220"/>
+      <stop offset="100%" stop-color="#0f2040"/>
+    </linearGradient>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c1220"/>
+      <stop offset="100%" stop-color="#2a0c0c"/>
+    </linearGradient>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0c1220"/>
+      <stop offset="100%" stop-color="#221a00"/>
+    </linearGradient>
+    <clipPath id="cph"><rect x="30"  y="260" width="300" height="480" rx="16"/></clipPath>
+    <clipPath id="cpk"><rect x="390" y="260" width="300" height="480" rx="16"/></clipPath>
+    <clipPath id="cpy"><rect x="750" y="260" width="300" height="480" rx="16"/></clipPath>
+  </defs>
+
+  <!-- Background: split 3 panels -->
+  <rect x="0"   y="0" width="360" height="1080" fill="url(#bg1)"/>
+  <rect x="360" y="0" width="360" height="1080" fill="url(#bg2)"/>
+  <rect x="720" y="0" width="360" height="1080" fill="url(#bg3)"/>
+
+  <!-- Panel dividers -->
+  <line x1="360" y1="0" x2="360" y2="1080" stroke="#1e293b" stroke-width="2"/>
+  <line x1="720" y1="0" x2="720" y2="1080" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Top accent bars -->
+  <rect x="0"   y="0" width="360" height="5" fill="#93c5fd"/>
+  <rect x="360" y="0" width="360" height="5" fill="#fca5a5"/>
+  <rect x="720" y="0" width="360" height="5" fill="#fde68a"/>
+
+  <!-- Snow particles -->
+  <g fill="white" opacity="0.3">
+    <circle cx="40"  cy="60"  r="2"/>
+    <circle cx="160" cy="40"  r="1.5"/>
+    <circle cx="280" cy="75"  r="2"/>
+    <circle cx="400" cy="55"  r="1.5"/>
+    <circle cx="520" cy="35"  r="2"/>
+    <circle cx="640" cy="68"  r="1.5"/>
+    <circle cx="760" cy="42"  r="2"/>
+    <circle cx="880" cy="60"  r="1.5"/>
+    <circle cx="1000" cy="38" r="2"/>
+    <circle cx="22"  cy="400" r="1.5"/>
+    <circle cx="338" cy="600" r="2"/>
+    <circle cx="382" cy="450" r="1.5"/>
+    <circle cx="698" cy="350" r="2"/>
+    <circle cx="742" cy="500" r="1.5"/>
+    <circle cx="1058" cy="420" r="2"/>
+    <circle cx="100" cy="900" r="1.5"/>
+    <circle cx="470" cy="950" r="2"/>
+    <circle cx="840" cy="920" r="1.5"/>
+  </g>
+
+  <!-- HINATA panel -->
+  <!-- Decorative ❄ -->
+  <text x="22"  y="120" font-size="70" fill="#93c5fd" opacity="0.08" font-family="sans-serif">❄</text>
+  <text x="200" y="1050" font-size="60" fill="#93c5fd" opacity="0.05" font-family="sans-serif">❄</text>
+
+  <text x="60" y="98" font-size="12" letter-spacing="3" fill="#93c5fd" opacity="0.6"
+        font-family="'Arial', sans-serif">01</text>
+
+  <text x="40" y="180" font-size="64" font-weight="bold" fill="white"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif">ヒナタ</text>
+  <text x="42" y="218" font-size="15" fill="#93c5fd"
+        font-family="'Arial', sans-serif">Guitar &amp; Vocal</text>
+  <line x1="40" y1="235" x2="330" y2="235" stroke="#93c5fd" stroke-width="0.6" opacity="0.4"/>
+
+  <!-- Portrait -->
+  <rect x="30"  y="250" width="300" height="500" rx="16"
+        fill="#93c5fd" fill-opacity="0.06" stroke="#93c5fd" stroke-width="1" stroke-opacity="0.4"/>
+  <image href="../chara_hinata.png" x="30" y="250" width="300" height="500"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#cph)"/>
+
+  <!-- Name bar over image -->
+  <rect x="30" y="718" width="300" height="32" rx="8" fill="#0c1220" fill-opacity="0.88"/>
+  <text x="180" y="740" text-anchor="middle" font-size="15" fill="#93c5fd"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">黒髪 / 主人公</text>
+
+  <!-- Quote -->
+  <text x="42" y="810" font-size="16" fill="#64748b"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">「……やるか」</text>
+
+  <!-- Color swatches -->
+  <circle cx="44"  cy="868" r="9" fill="#93c5fd"/>
+  <circle cx="68"  cy="868" r="9" fill="#1e3a5f"/>
+  <circle cx="92"  cy="868" r="9" fill="#0f172a"/>
+
+  <!-- KOUTA panel -->
+  <text x="382" y="120" font-size="70" fill="#fca5a5" opacity="0.08" font-family="sans-serif">❄</text>
+  <text x="560" y="1050" font-size="60" fill="#fca5a5" opacity="0.05" font-family="sans-serif">❄</text>
+
+  <text x="420" y="98" font-size="12" letter-spacing="3" fill="#fca5a5" opacity="0.6"
+        font-family="'Arial', sans-serif">02</text>
+
+  <text x="400" y="180" font-size="64" font-weight="bold" fill="white"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif">コウタ</text>
+  <text x="402" y="218" font-size="15" fill="#fca5a5"
+        font-family="'Arial', sans-serif">Bass</text>
+  <line x1="400" y1="235" x2="690" y2="235" stroke="#fca5a5" stroke-width="0.6" opacity="0.4"/>
+
+  <rect x="390" y="250" width="300" height="500" rx="16"
+        fill="#fca5a5" fill-opacity="0.06" stroke="#fca5a5" stroke-width="1" stroke-opacity="0.4"/>
+  <image href="../chara_kouta.png" x="390" y="250" width="300" height="500"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#cpk)"/>
+
+  <rect x="390" y="718" width="300" height="32" rx="8" fill="#0c1220" fill-opacity="0.88"/>
+  <text x="540" y="740" text-anchor="middle" font-size="15" fill="#fca5a5"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">赤髪 / ベーシスト</text>
+
+  <text x="402" y="810" font-size="16" fill="#64748b"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">「これで行く」</text>
+
+  <circle cx="404" cy="868" r="9" fill="#fca5a5"/>
+  <circle cx="428" cy="868" r="9" fill="#7f1d1d"/>
+  <circle cx="452" cy="868" r="9" fill="#0c1220"/>
+
+  <!-- HAYATE panel -->
+  <text x="742" y="120" font-size="70" fill="#fde68a" opacity="0.08" font-family="sans-serif">❄</text>
+  <text x="920" y="1050" font-size="60" fill="#fde68a" opacity="0.05" font-family="sans-serif">❄</text>
+
+  <text x="780" y="98" font-size="12" letter-spacing="3" fill="#fde68a" opacity="0.6"
+        font-family="'Arial', sans-serif">03</text>
+
+  <text x="760" y="180" font-size="64" font-weight="bold" fill="white"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif">ハヤテ</text>
+  <text x="762" y="218" font-size="15" fill="#fde68a"
+        font-family="'Arial', sans-serif">Drums</text>
+  <line x1="760" y1="235" x2="1050" y2="235" stroke="#fde68a" stroke-width="0.6" opacity="0.4"/>
+
+  <rect x="750" y="250" width="300" height="500" rx="16"
+        fill="#fde68a" fill-opacity="0.06" stroke="#fde68a" stroke-width="1" stroke-opacity="0.4"/>
+  <image href="../chara_hayate.png" x="750" y="250" width="300" height="500"
+         preserveAspectRatio="xMidYMid meet" clip-path="url(#cpy)"/>
+
+  <rect x="750" y="718" width="300" height="32" rx="8" fill="#0c1220" fill-opacity="0.88"/>
+  <text x="900" y="740" text-anchor="middle" font-size="15" fill="#fde68a"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">金髪 / ドラマー</text>
+
+  <text x="762" y="810" font-size="16" fill="#64748b"
+        font-family="'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif">「わー！やった！」</text>
+
+  <circle cx="764" cy="868" r="9" fill="#fde68a"/>
+  <circle cx="788" cy="868" r="9" fill="#92400e"/>
+  <circle cx="812" cy="868" r="9" fill="#0c1220"/>
+
+  <!-- Brand footer -->
+  <text x="540" y="958" text-anchor="middle" font-size="13" letter-spacing="5" fill="#334155"
+        font-family="'Arial', sans-serif">SNOW FLAKES</text>
+  <text x="540" y="984" text-anchor="middle" font-size="12" fill="#1e293b" letter-spacing="3"
+        font-family="'Arial', sans-serif">sunnyplace25.github.io/taskpwa</text>
+
+  <!-- Bottom color bar -->
+  <rect x="0"   y="1020" width="360" height="8" fill="#93c5fd"/>
+  <rect x="360" y="1020" width="360" height="8" fill="#fca5a5"/>
+  <rect x="720" y="1020" width="360" height="8" fill="#fde68a"/>
+</svg>
