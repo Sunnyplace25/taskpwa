@@ -1172,9 +1172,9 @@ const CHARA_REC = {
 function showCharaRec(bg) {
   if (!bg) {
     const hakoshi = [
-      { img: 'chara_hinata.png', msg: '……残ったなら、いいねと登録で<br>応援してほしい。ちゃんと受け取る' },
-      { img: 'chara_kouta.png',  msg: '残ったなら、いいねと登録で<br>応援してくれ。三人で続ける' },
-      { img: 'chara_hayate.png', msg: 'いいなって思ったら、いいねと登録で<br>応援して！めっちゃ励みになるから！' },
+      { img: 'chara_hinata.png', msg: '……残ったなら、いいねと登録で応援してほしい。ちゃんと受け取る' },
+      { img: 'chara_kouta.png',  msg: '残ったなら、いいねと登録で応援してくれ。三人で続ける' },
+      { img: 'chara_hayate.png', msg: 'いいなって思ったら、いいねと登録で応援して！めっちゃ励みになるから！' },
     ];
     const pick = hakoshi[Math.floor(Math.random() * hakoshi.length)];
     setTimeout(() => showOverlay(pick.msg, pick.img, 5500), 80);
