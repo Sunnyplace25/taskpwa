@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 93;
+const APP_VERSION = 94;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1491,8 +1491,12 @@ function init() {
   function resetAllSpecial(hint) {
     specialUnlocked = {};
     episodeUnlocked = {};
+    musicPopupShown = {};
+    episodeRead = {};
     localStorage.removeItem('specialUnlocked');
     localStorage.removeItem('episodeUnlocked');
+    localStorage.removeItem('musicPopupShown');
+    localStorage.removeItem('episodeRead');
     sweetsUnlocked = false;
     localStorage.removeItem('sweetsUnlocked');
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
