@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 97;
+const APP_VERSION = 98;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -635,8 +635,26 @@ function pgResolve(chain) {
 // GS_KEYWORDS[i] と gsKey-{i} スロットは常に対応固定
 // 0=残る(ヒナタ) 1=半分(コウタ) 2=重なる(ハヤテ)
 const GS_KEYWORDS = ['残る', '半分', '重なる'];
-const GS_KEY_THRESHOLDS = [30, 65, 100];
-const GS_BG_FIRST = { 'bg.jpg': 0, 'bg3.jpg': 1, 'bg2.jpg': 2 };
+const GS_KEY_THRESHOLDS = [50, 100, 150];
+const GS_BG_FIRST = { 'bg.jpg': 0, 'bg3.jpg': 1, 'bg2.jpg': 2, 'sweets_hinata.jpg': 0, 'sweets_kouta.jpg': 1, 'sweets_hayate.jpg': 2 };
+const SPECIAL_BG_IMGS  = ['sweets_hinata.jpg', 'sweets_kouta.jpg', 'sweets_hayate.jpg'];
+const SPECIAL_BG_NAMES = ['ヒナタ', 'コウタ', 'ハヤテ'];
+let specialBgUnlocked = JSON.parse(localStorage.getItem('specialBgUnlocked') || '[false,false,false]');
+let _onSpecialBgUpdate = null;
+
+function bgBaseKey(bg) {
+  if (bg === 'sweets_hinata.jpg') return 'bg.jpg';
+  if (bg === 'sweets_kouta.jpg')  return 'bg3.jpg';
+  if (bg === 'sweets_hayate.jpg') return 'bg2.jpg';
+  return bg;
+}
+
+const EPISODE_DAY_LIMIT_MSG = {
+  'bg.jpg':  { img: 'chara_hinata.png', msg: '今日はもう読んだ。また明日来て' },
+  'bg3.jpg': { img: 'chara_kouta.png',  msg: '今日の分は読んだ。明日また来い' },
+  'bg2.jpg': { img: 'chara_hayate.png', msg: '今日はもう読んだよ！また明日ね！' },
+};
+
 const GS_KEY_CHARA = [
   { img: 'chara_hinata.png', color: '#93c5fd', msg: (w) => `<span style="color:#93c5fd;font-weight:700">${w}</span>、か。<br>覚えておいて。` },
   { img: 'chara_kouta.png',  color: '#fca5a5', msg: (w) => `<span style="color:#fca5a5;font-weight:700">${w}</span>、見えた。<br>使ってみろ。` },
@@ -714,7 +732,31 @@ function addSnowCount(n) {
       }, rank * 300);
     }
   });
-  if (newUnlock) localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
+  if (newUnlock) {
+    localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
+    // スペシャル背景アンロック
+    GS_KEY_THRESHOLDS.forEach((threshold, rank) => {
+      const keyIdx = order[rank];
+      if (gsKeyRevealed[keyIdx] && !specialBgUnlocked[keyIdx]) {
+        specialBgUnlocked[keyIdx] = true;
+      }
+    });
+    localStorage.setItem('specialBgUnlocked', JSON.stringify(specialBgUnlocked));
+    if (_onSpecialBgUpdate) _onSpecialBgUpdate();
+    // 全鍵解放後、自動リセット
+    if (gsKeyRevealed.every(v => v)) {
+      setTimeout(() => {
+        const lastIdx = order[2];
+        const kc = GS_KEY_CHARA[lastIdx];
+        queuePopup(kc.img, 'また❄を集めよう！', 3000);
+        gsKeyRevealed = [false, false, false];
+        gsSnowCount = 0;
+        localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
+        localStorage.removeItem('gsSnowCount');
+        renderGsKeys();
+      }, 4500);
+    }
+  }
   renderGsKeys();
 }
 
@@ -1441,6 +1483,29 @@ function init() {
   };
   let specialUnlocked = JSON.parse(localStorage.getItem('specialUnlocked') || '{}');
 
+  function renderSpecialBgSlots() {
+    const container = document.getElementById('specialBgSlots');
+    if (!container) return;
+    container.innerHTML = '';
+    const anyUnlocked = specialBgUnlocked.some(v => v);
+    container.style.display = anyUnlocked ? '' : 'none';
+    if (!anyUnlocked) return;
+    SPECIAL_BG_IMGS.forEach((img, i) => {
+      if (!specialBgUnlocked[i]) return;
+      const btn = document.createElement('button');
+      btn.className = 'settings-chara-btn';
+      btn.dataset.bg = img;
+      btn.innerHTML = `<img src="${img}" alt="${SPECIAL_BG_NAMES[i]}"><span>${SPECIAL_BG_NAMES[i]}</span>`;
+      btn.addEventListener('click', () => {
+        setFavBg(img);
+        setRandomBg();
+      });
+      container.appendChild(btn);
+    });
+    updateCharaBtns();
+  }
+  _onSpecialBgUpdate = renderSpecialBgSlots;
+
   function renderSpecialSlots() {
     const container = document.getElementById('specialSlots');
     if (!container) return;
@@ -1604,6 +1669,7 @@ function init() {
   }
 
   renderSpecialSlots();
+  renderSpecialBgSlots();
   addBtn('codeSubmit', checkCode);
   document.getElementById('codeInput')?.addEventListener('keydown', e => {
     if (e.key === 'Enter') checkCode();
@@ -1731,6 +1797,7 @@ function init() {
   let episodeUnlocked   = JSON.parse(localStorage.getItem('episodeUnlocked')   || '{}');
   let musicPopupShown   = JSON.parse(localStorage.getItem('musicPopupShown')   || '{}');
   let episodeRead       = JSON.parse(localStorage.getItem('episodeRead')       || '{}');
+  let lastEpisodeDate   = localStorage.getItem('lastEpisodeDate') || '';
 
   const EPISODE_HINT_MSG = {
     hinata: { img: 'chara_hinata.png', msg: '……俺が食べていたのは？' },
@@ -1752,7 +1819,14 @@ function init() {
         ? `<span class="episode-icon">📖</span><span>${info.name}</span>`
         : `<span class="special-lock">🔒</span><span>${info.name}</span>`;
       if (unlocked && info.text) {
-        slot.addEventListener('click', () => showEpisode(info));
+        slot.addEventListener('click', () => {
+          if (lastEpisodeDate === todayStr()) {
+            const m = EPISODE_DAY_LIMIT_MSG[bgBaseKey(currentBg)] || EPISODE_DAY_LIMIT_MSG['bg.jpg'];
+            queuePopup(m.img, m.msg, 3500);
+            return;
+          }
+          showEpisode(info);
+        });
       } else if (!unlocked && allSpecial) {
         slot.addEventListener('click', () => {
           const m = EPISODE_HINT_MSG[key];
@@ -1785,6 +1859,8 @@ function init() {
       // エピソードを読んだ記録
       episodeRead[_currentEpisodeKey] = true;
       localStorage.setItem('episodeRead', JSON.stringify(episodeRead));
+      lastEpisodeDate = todayStr();
+      localStorage.setItem('lastEpisodeDate', lastEpisodeDate);
       // 初めて読み終えた＆両方解放済みなら曲解放
       if (!wasRead && isMusicUnlocked(_currentEpisodeKey) && !musicPopupShown[_currentEpisodeKey]) {
         const key = _currentEpisodeKey;
