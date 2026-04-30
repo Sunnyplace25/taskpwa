@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 94;
+const APP_VERSION = 95;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1593,12 +1593,6 @@ function init() {
         hint.style.color = '#6366f1';
         checkSweetsUnlock();
         showSpecialUnlockPopup(match.key);
-        // エピソード読了済みなら曲解放ポップアップ
-        if (isMusicUnlocked(match.key) && episodeRead[match.key] && !musicPopupShown[match.key]) {
-          musicPopupShown[match.key] = true;
-          localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
-          setTimeout(() => showMusicUnlockPopup(match.key), 4500);
-        }
       }
     } else {
       hint.textContent = 'キーワードが違います';
