@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 100;
+const APP_VERSION = 101;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1318,9 +1318,18 @@ function setFavBg(bg) {
 }
 
 function setRandomBg(forceRandom = false) {
-  let images = ['bg.jpg', 'bg2.jpg', 'bg3.jpg'];
-  SPECIAL_BG_IMGS.forEach((img, i) => { if (specialBgUnlocked[i]) images.push(img); });
-  const picked = (!forceRandom && favBg) ? favBg : images[Math.floor(Math.random() * images.length)];
+  let images;
+  if (!forceRandom && favBg) {
+    // 推しキャラモード: 通常bg + 解放済みsweets bgからランダム
+    const idx = GS_BG_FIRST[favBg];
+    images = [favBg];
+    if (idx !== undefined && specialBgUnlocked[idx]) images.push(SPECIAL_BG_IMGS[idx]);
+  } else {
+    // 箱推しモード: 全bg + 解放済みsweets bg
+    images = ['bg.jpg', 'bg2.jpg', 'bg3.jpg'];
+    SPECIAL_BG_IMGS.forEach((img, i) => { if (specialBgUnlocked[i]) images.push(img); });
+  }
+  const picked = images[Math.floor(Math.random() * images.length)];
   currentBg = picked;
   document.getElementById('bgImg').style.backgroundImage = `url('${picked}')`;
 }
