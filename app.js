@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 90;
+const APP_VERSION = 91;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1759,7 +1759,10 @@ function init() {
     });
   }
 
+  let _currentEpisodeKey = null;
+
   function showEpisode(info) {
+    _currentEpisodeKey = info.key;
     document.getElementById('episodeViewerName').textContent = info.title;
     const body = document.getElementById('episodeViewerBody');
     body.innerHTML =
@@ -1767,37 +1770,19 @@ function init() {
       `<div class="episode-narou-link"><a href="https://mypage.syosetu.com/2212173/" target="_blank" rel="noopener">物語の続きはこちらからも読めます</a></div>`;
     const inner = document.getElementById('episodeViewer').querySelector('.episode-viewer-inner');
     inner.style.backgroundImage = info.bgImg ? `url('${info.bgImg}')` : '';
+    inner.scrollTop = 0;
     document.getElementById('episodeViewer').classList.remove('hidden');
-
-    // 読み終わり（最下部スクロール）でミュージック解放
-    if (isMusicUnlocked(info.key) && !musicPopupShown[info.key]) {
-      const triggerMusic = () => {
-        musicPopupShown[info.key] = true;
-        localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
-        setTimeout(() => showMusicUnlockPopup(info.key), 600);
-      };
-      const onScroll = () => {
-        const bottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 40;
-        if (bottom) {
-          inner.removeEventListener('scroll', onScroll);
-          triggerMusic();
-        }
-      };
-      inner.addEventListener('scroll', onScroll, { passive: true });
-      // 開いた時点でスクロール不要なら即発火
-      setTimeout(() => {
-        if (musicPopupShown[info.key]) return;
-        const bottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 40;
-        if (bottom) {
-          inner.removeEventListener('scroll', onScroll);
-          triggerMusic();
-        }
-      }, 300);
-    }
   }
 
   document.getElementById('episodeViewerClose').addEventListener('click', () => {
     document.getElementById('episodeViewer').classList.add('hidden');
+    // 閉じたときにミュージック解放ポップアップを表示
+    if (_currentEpisodeKey && isMusicUnlocked(_currentEpisodeKey) && !musicPopupShown[_currentEpisodeKey]) {
+      musicPopupShown[_currentEpisodeKey] = true;
+      localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
+      setTimeout(() => showMusicUnlockPopup(_currentEpisodeKey), 400);
+    }
+    _currentEpisodeKey = null;
   });
 
   function checkEpisodeCode() {
