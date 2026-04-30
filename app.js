@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 95;
+const APP_VERSION = 96;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1781,13 +1781,15 @@ function init() {
   document.getElementById('episodeViewerClose').addEventListener('click', () => {
     document.getElementById('episodeViewer').classList.add('hidden');
     if (_currentEpisodeKey) {
+      const wasRead = episodeRead[_currentEpisodeKey];
       // エピソードを読んだ記録
       episodeRead[_currentEpisodeKey] = true;
       localStorage.setItem('episodeRead', JSON.stringify(episodeRead));
-      // 両方解放済みかつポップアップ未表示なら曲解放
-      if (isMusicUnlocked(_currentEpisodeKey) && !musicPopupShown[_currentEpisodeKey]) {
+      // 初めて読み終えた＆両方解放済みなら曲解放
+      if (!wasRead && isMusicUnlocked(_currentEpisodeKey) && !musicPopupShown[_currentEpisodeKey]) {
         musicPopupShown[_currentEpisodeKey] = true;
         localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
+        renderMusicList();
         setTimeout(() => showMusicUnlockPopup(_currentEpisodeKey), 400);
       }
     }
@@ -1845,7 +1847,7 @@ function init() {
   let currentAudio = null;
 
   function isMusicUnlocked(key) {
-    return specialUnlocked[key] && episodeUnlocked[key];
+    return specialUnlocked[key] && episodeUnlocked[key] && episodeRead[key];
   }
 
   function renderMusicList() {
