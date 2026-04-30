@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 92;
+const APP_VERSION = 93;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1589,6 +1589,12 @@ function init() {
         hint.style.color = '#6366f1';
         checkSweetsUnlock();
         showSpecialUnlockPopup(match.key);
+        // エピソード読了済みなら曲解放ポップアップ
+        if (isMusicUnlocked(match.key) && episodeRead[match.key] && !musicPopupShown[match.key]) {
+          musicPopupShown[match.key] = true;
+          localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
+          setTimeout(() => showMusicUnlockPopup(match.key), 4500);
+        }
       }
     } else {
       hint.textContent = 'キーワードが違います';
@@ -1726,6 +1732,7 @@ function init() {
   };
   let episodeUnlocked   = JSON.parse(localStorage.getItem('episodeUnlocked')   || '{}');
   let musicPopupShown   = JSON.parse(localStorage.getItem('musicPopupShown')   || '{}');
+  let episodeRead       = JSON.parse(localStorage.getItem('episodeRead')       || '{}');
 
   const EPISODE_HINT_MSG = {
     hinata: { img: 'chara_hinata.png', msg: '……俺が食べていたのは？' },
@@ -1775,11 +1782,16 @@ function init() {
 
   document.getElementById('episodeViewerClose').addEventListener('click', () => {
     document.getElementById('episodeViewer').classList.add('hidden');
-    // 閉じたときにミュージック解放ポップアップを表示
-    if (_currentEpisodeKey && isMusicUnlocked(_currentEpisodeKey) && !musicPopupShown[_currentEpisodeKey]) {
-      musicPopupShown[_currentEpisodeKey] = true;
-      localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
-      setTimeout(() => showMusicUnlockPopup(_currentEpisodeKey), 400);
+    if (_currentEpisodeKey) {
+      // エピソードを読んだ記録
+      episodeRead[_currentEpisodeKey] = true;
+      localStorage.setItem('episodeRead', JSON.stringify(episodeRead));
+      // 両方解放済みかつポップアップ未表示なら曲解放
+      if (isMusicUnlocked(_currentEpisodeKey) && !musicPopupShown[_currentEpisodeKey]) {
+        musicPopupShown[_currentEpisodeKey] = true;
+        localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
+        setTimeout(() => showMusicUnlockPopup(_currentEpisodeKey), 400);
+      }
     }
     _currentEpisodeKey = null;
   });
