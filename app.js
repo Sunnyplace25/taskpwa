@@ -1156,9 +1156,9 @@ function showPopup(msg, duration = 3500) {
 }
 
 const EPISODE_UNLOCK_MSG = {
-  hinata: { img: 'chara_hinata.png', msg: '……読んでくれたんだ。<br>少し、恥ずかしいけど' },
-  kouta:  { img: 'chara_kouta.png',  msg: '解放した。<br>……読むか、読まないかはお前次第だ' },
-  hayate: { img: 'chara_hayate.png', msg: 'エピソード解放！<br>読んでくれたらうれしいんだけど！' },
+  hinata: { img: 'chara_hinata.png', msg: '……解放された。<br>読むかどうかは、あなたが決めていい' },
+  kouta:  { img: 'chara_kouta.png',  msg: '解放した。<br>読む気になったら、開いてみろ' },
+  hayate: { img: 'chara_hayate.png', msg: 'エピソード解放！<br>ぜひ読んでみてよ！' },
 };
 
 const SPECIAL_UNLOCK_MSG = {
