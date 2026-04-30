@@ -1182,10 +1182,11 @@ function showCharaRec(bg) {
   }
   const rec = CHARA_REC[bg];
   if (!rec) return;
-  const html = rec.items
-    .map(i => `<span class="rec-tag ${i.cls}">${i.label}</span>${i.line}`)
-    .join('<br>');
-  setTimeout(() => showOverlay(html, rec.img, 8000), 80);
+  setTimeout(() => {
+    rec.items.forEach(i => {
+      queuePopup(rec.img, `<span class="rec-tag ${i.cls}">${i.label}</span>${i.line}`, 4000);
+    });
+  }, 80);
 }
 
 const EPISODE_UNLOCK_MSG = {
