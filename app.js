@@ -1918,11 +1918,13 @@ function init() {
       dist = 0;
       if (pulled) {
         loadTasks();
-        render();
+        if (currentView === 'week') renderWeekView();
+        else render();
         const chara = CHARACTERS[currentBg];
         if (chara?.refresh) {
           const msg = chara.refresh[Math.floor(Math.random() * chara.refresh.length)];
-          showOverlay(msg, chara.image, 3000);
+          // touchend のバブリングが完了してから表示
+          setTimeout(() => showOverlay(msg, chara.image, 3000), 80);
         }
       }
     }, { passive: true });
