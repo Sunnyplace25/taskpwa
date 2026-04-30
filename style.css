@@ -101,27 +101,7 @@ body {
   pointer-events: none;
 }
 
-.notif-btn {
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.7);
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, color 0.2s;
-}
 
-.notif-btn:hover, .notif-btn:active {
-  background: rgba(255,255,255,0.2);
-  color: white;
-}
-
-.notif-btn.granted {
-  color: #fbbf24;
-}
 
 /* ── Main ── */
 .main {

@@ -5,7 +5,6 @@ const STORAGE_KEY = 'taskpwa_tasks';
 let tasks = [];
 let currentView = 'today';
 let editingTaskId = null;
-let notifTimers = {};
 
 function loadTasks() {
   try {
@@ -17,7 +16,6 @@ function loadTasks() {
 
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-  scheduleAllNotifications();
   render();
 }
 
@@ -49,7 +47,6 @@ function updateTask(id, data) {
 }
 
 function deleteTask(id) {
-  clearTimer(id);
   tasks = tasks.filter(t => t.id !== id);
   saveTasks();
 }
@@ -113,51 +110,39 @@ function getTodayTasks() {
 }
 
 // ── Notifications ─────────────────────────────────────────
-async function requestNotifPermission() {
-  if (!('Notification' in window)) return;
-  await Notification.requestPermission();
-  updateNotifBtn();
-  scheduleAllNotifications();
-}
-
-function updateNotifBtn() {
-  const btn = document.getElementById('notifBtn');
-  if (!btn) return;
-  btn.classList.toggle('granted', Notification.permission === 'granted');
-  btn.title = Notification.permission === 'granted' ? '通知ON' : '通知を許可';
-}
-
-function clearTimer(id) {
-  if (notifTimers[id]) { clearTimeout(notifTimers[id]); delete notifTimers[id]; }
-}
-
-function scheduleAllNotifications() {
-  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-  Object.keys(notifTimers).forEach(clearTimer);
-
+// ── 起動時タスク期限チェック ──────────────────────────────
+function checkDueOnOpen() {
   const now = Date.now();
-  const week = 7 * 24 * 60 * 60 * 1000;
+  const soon = 60 * 60 * 1000; // 1時間以内
 
-  tasks.forEach(task => {
-    if (task.completed || !task.dueDate) return;
-    const dueMs = new Date(task.dueDate + (task.dueTime ? `T${task.dueTime}:00` : 'T09:00:00')).getTime();
-    const fireMs = dueMs - task.notifOffset * 60_000;
-    if (fireMs > now && fireMs - now < week) {
-      notifTimers[task.id] = setTimeout(() => fireNotification(task), fireMs - now);
-    }
+  const overdue = tasks.filter(t =>
+    !t.completed && t.dueDate && isOverdue(t)
+  );
+  const dueSoon = tasks.filter(t => {
+    if (t.completed || !t.dueDate) return false;
+    const dueMs = new Date(t.dueDate + (t.dueTime ? `T${t.dueTime}` : 'T23:59:59')).getTime();
+    return dueMs > now && dueMs - now <= soon;
   });
-}
 
-function fireNotification(task) {
-  if (Notification.permission !== 'granted') return;
-  const due = formatDue(task);
-  const n = new Notification(`📋 ${task.title}`, {
-    body: due ? `期限: ${due}` : 'タスクの期限です',
-    icon: 'icon.svg',
-    tag: task.id,
-    renotify: true,
-  });
-  n.onclick = () => { window.focus(); n.close(); };
+  if (overdue.length > 0) {
+    const chara = CHARACTERS[currentBg];
+    const msgs = {
+      'bg.jpg':  `……${overdue.length}件、期限が過ぎてる。<br>一緒に確認しよう`,
+      'bg2.jpg': `おい！${overdue.length}件、期限切れだぞ！<br>早めに片付けよう！`,
+      'bg3.jpg': `${overdue.length}件、期限オーバーだ。<br>確認しろ`,
+    };
+    const msg = msgs[currentBg] || `期限切れのタスクが${overdue.length}件あります`;
+    if (chara) setTimeout(() => showOverlay(msg, chara.image, 5000), 1200);
+  } else if (dueSoon.length > 0) {
+    const chara = CHARACTERS[currentBg];
+    const msgs = {
+      'bg.jpg':  `……もうすぐ期限のタスクがある。<br>無理しないで、ひとつずつ`,
+      'bg2.jpg': `もうすぐ期限くるやつあるよ！<br>確認しといて！`,
+      'bg3.jpg': `もうすぐ期限だ。<br>忘れるな`,
+    };
+    const msg = msgs[currentBg] || `期限が近いタスクが${dueSoon.length}件あります`;
+    if (chara) setTimeout(() => showOverlay(msg, chara.image, 4500), 1200);
+  }
 }
 
 // ── Rendering ─────────────────────────────────────────────
@@ -1251,7 +1236,6 @@ function init() {
   setTimeout(showGreeting, 300);
   loadTasks();
   registerSW();
-  updateNotifBtn();
   const _calDate = document.getElementById('emptyCalDate');
   if (_calDate) _calDate.textContent = new Date().getDate();
 
@@ -1270,7 +1254,6 @@ function init() {
   }
 
   addBtn('fabBtn', openAddModal);
-  addBtn('notifBtn', requestNotifPermission);
   addBtn('modalClose', closeModal);
   addBtn('cancelBtn', closeModal);
   addBtn('saveBtn', saveTask);
@@ -1924,13 +1907,8 @@ function init() {
     if (e.key === 'Enter') saveTask();
   });
 
-  // Auto-request notification permission after a short delay
-  if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
-    setTimeout(requestNotifPermission, 1500);
-  }
-
-  scheduleAllNotifications();
   render();
+  checkDueOnOpen();
 
   // アプリがバックグラウンド・非表示になったら音を止める
   document.addEventListener('visibilitychange', () => {
