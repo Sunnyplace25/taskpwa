@@ -1171,11 +1171,13 @@ const CHARA_REC = {
 
 function showCharaRec(bg) {
   if (!bg) {
-    const imgs = ['chara_hinata.png', 'chara_kouta.png', 'chara_hayate.png'];
-    const img = imgs[Math.floor(Math.random() * imgs.length)];
-    setTimeout(() => showOverlay(
-      'チャンネル登録・いいね・感想、<br>全部もらえたら、ちゃんと覚える', img, 5500
-    ), 80);
+    const hakoshi = [
+      { img: 'chara_hinata.png', msg: '……残ったなら、いいねと登録で<br>応援してほしい。ちゃんと受け取る' },
+      { img: 'chara_kouta.png',  msg: '残ったなら、いいねと登録で<br>応援してくれ。三人で続ける' },
+      { img: 'chara_hayate.png', msg: 'いいなって思ったら、いいねと登録で<br>応援して！めっちゃ励みになるから！' },
+    ];
+    const pick = hakoshi[Math.floor(Math.random() * hakoshi.length)];
+    setTimeout(() => showOverlay(pick.msg, pick.img, 5500), 80);
     return;
   }
   const rec = CHARA_REC[bg];
