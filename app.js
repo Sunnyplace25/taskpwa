@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 88;
+const APP_VERSION = 89;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1266,6 +1266,7 @@ let favBg = localStorage.getItem('favBg') || '';
 function setFavBg(bg) {
   favBg = bg;
   localStorage.setItem('favBg', bg);
+  _recQueues.delete(bg); // キャラ変更時にキューをリセット
   updateCharaBtns();
 }
 
