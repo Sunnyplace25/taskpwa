@@ -1047,12 +1047,7 @@ function switchView(view) {
 
 // ── Service Worker ────────────────────────────────────────
 function registerSW() {
-  // SW登録前に古いキャッシュを全削除
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(regs => {
-      regs.forEach(r => r.unregister());
-    });
-  }
+  // SW登録はindex.htmlで行う
 }
 
 // ── Praise ───────────────────────────────────────────────
