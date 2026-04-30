@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.02';
+const APP_VERSION = '1.03';
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1558,6 +1558,9 @@ function init() {
     localStorage.removeItem('episodeRead');
     sweetsUnlocked = false;
     localStorage.removeItem('sweetsUnlocked');
+    specialBgUnlocked = [false, false, false];
+    localStorage.removeItem('specialBgUnlocked');
+    setRandomBg();
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
     currentTrack = null;
     renderSpecialSlots();
