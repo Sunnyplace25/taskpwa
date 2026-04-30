@@ -1146,9 +1146,9 @@ const EPISODE_UNLOCK_MSG = {
 };
 
 const SPECIAL_UNLOCK_MSG = {
-  hinata: { img: 'chara_hinata.png', msg: '……たぶん、好きだと思う' },
-  kouta:  { img: 'chara_kouta.png',  msg: '……ちゃんと選んだ' },
-  hayate: { img: 'chara_hayate.png', msg: '見てもらいたいなって思って！' },
+  hinata: { img: 'chara_hinata.png', msg: '……こういうの、慣れてない。<br>でも、見てほしい' },
+  kouta:  { img: 'chara_kouta.png',  msg: '誰にでもじゃない。<br>⋯⋯ちゃんと選んだ' },
+  hayate: { img: 'chara_hayate.png', msg: 'なんかさ、これ。<br>見てもらいたいなって思って！' },
 };
 
 const MUSIC_UNLOCK_MSG = {
