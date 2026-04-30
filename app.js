@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 85;
+const APP_VERSION = 86;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1140,10 +1140,10 @@ const CHARA_REC = {
   'bg.jpg': {
     img: 'chara_hinata.png',
     items: [
-      { cls: 'rec-narou',  label: '📖 小説を読む', line: '……ここに来て。ちゃんと、待ってる' },
-      { cls: 'rec-insta',  label: '📷 Instagram',  line: '……見てて。離れないで' },
-      { cls: 'rec-yt',     label: '▶ YouTube',     line: '……声で、覚えてほしい' },
-      { cls: 'rec-kindle', label: '📚 Kindle',     line: '……そばに置いて。消えないから' },
+      { cls: 'rec-narou',  label: '📖 小説を読む', line: 'ここに来て。ちゃんと、待ってる' },
+      { cls: 'rec-insta',  label: '📷 Instagram',  line: '見てて。離れないで' },
+      { cls: 'rec-yt',     label: '▶ YouTube',     line: '声で、覚えてほしい' },
+      { cls: 'rec-kindle', label: '📚 Kindle',     line: 'そばに置いて。消えないから' },
     ],
   },
   'bg3.jpg': {
@@ -1179,11 +1179,8 @@ function showCharaRec(bg) {
   }
   const rec = CHARA_REC[bg];
   if (!rec) return;
-  setTimeout(() => {
-    rec.items.forEach(i => {
-      queuePopup(rec.img, `<span class="rec-tag ${i.cls}">${i.label}</span>${i.line}`, 4000);
-    });
-  }, 80);
+  const i = rec.items[Math.floor(Math.random() * rec.items.length)];
+  setTimeout(() => queuePopup(rec.img, `<span class="rec-tag ${i.cls}">${i.label}</span>${i.line}`, 4000), 80);
 }
 
 const EPISODE_UNLOCK_MSG = {
