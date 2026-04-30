@@ -1,5 +1,7 @@
 'use strict';
 
+const APP_VERSION = 85;
+
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
 let tasks = [];
@@ -1981,6 +1983,10 @@ function init() {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) bgmPause();
   });
+
+  // バージョン番号を自動表示
+  const verNum = document.getElementById('appVerNum');
+  if (verNum) verNum.textContent = APP_VERSION;
 
   // バージョン表示タップで強制リロード（SW再登録 → 最新取得）
   document.getElementById('versionBtn')?.addEventListener('click', async () => {
