@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.03';
+const APP_VERSION = '1.04';
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -642,6 +642,12 @@ const GS_BG_FIRST = { 'bg.jpg': 0, 'bg3.jpg': 1, 'bg2.jpg': 2, 'sweets_hinata.jp
 const SPECIAL_BG_IMGS  = ['sweets_hinata.jpg', 'sweets_kouta.jpg', 'sweets_hayate.jpg'];
 const SPECIAL_BG_NAMES = ['ヒナタ', 'コウタ', 'ハヤテ'];
 let specialBgUnlocked = JSON.parse(localStorage.getItem('specialBgUnlocked') || '[false,false,false]');
+// v1.03 fix: stale specialBgUnlocked after old reset → clear once
+if (localStorage.getItem('specialBgMigrated103') !== '1') {
+  specialBgUnlocked = [false, false, false];
+  localStorage.removeItem('specialBgUnlocked');
+  localStorage.setItem('specialBgMigrated103', '1');
+}
 function bgBaseKey(bg) {
   if (bg === 'sweets_hinata.jpg') return 'bg.jpg';
   if (bg === 'sweets_kouta.jpg')  return 'bg3.jpg';
