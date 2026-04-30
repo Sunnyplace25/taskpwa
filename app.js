@@ -1767,16 +1767,28 @@ function init() {
 
     // 読み終わり（最下部スクロール）でミュージック解放
     if (isMusicUnlocked(info.key) && !musicPopupShown[info.key]) {
+      const triggerMusic = () => {
+        musicPopupShown[info.key] = true;
+        localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
+        setTimeout(() => showMusicUnlockPopup(info.key), 600);
+      };
       const onScroll = () => {
         const bottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 40;
         if (bottom) {
           inner.removeEventListener('scroll', onScroll);
-          musicPopupShown[info.key] = true;
-          localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
-          setTimeout(() => showMusicUnlockPopup(info.key), 600);
+          triggerMusic();
         }
       };
       inner.addEventListener('scroll', onScroll, { passive: true });
+      // 開いた時点でスクロール不要なら即発火
+      setTimeout(() => {
+        if (musicPopupShown[info.key]) return;
+        const bottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 40;
+        if (bottom) {
+          inner.removeEventListener('scroll', onScroll);
+          triggerMusic();
+        }
+      }, 300);
     }
   }
 
