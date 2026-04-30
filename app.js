@@ -32,7 +32,6 @@ function addTask(data) {
     repeat: data.repeat || 'none',
     dueDate: data.dueDate || null,
     dueTime: data.dueTime || null,
-    notifOffset: Number(data.notifOffset) ?? 30,
     memo: data.memo || '',
     completed: false,
     createdAt: Date.now(),
@@ -270,7 +269,7 @@ function openAddModal() {
   document.getElementById('taskRepeat').value = 'none';
   document.getElementById('taskDate').value = todayInputStr();
   document.getElementById('taskTime').value = '';
-  document.getElementById('taskNotif').value = '30';
+
   document.getElementById('taskMemo').value = '';
   showModal();
 }
@@ -285,7 +284,7 @@ function openEditModal(id) {
   document.getElementById('taskRepeat').value = task.repeat;
   document.getElementById('taskDate').value = task.dueDate || '';
   document.getElementById('taskTime').value = task.dueTime || '';
-  document.getElementById('taskNotif').value = String(task.notifOffset ?? 30);
+
   document.getElementById('taskMemo').value = task.memo || '';
   showModal();
 }
@@ -316,7 +315,7 @@ function saveTask() {
     repeat: document.getElementById('taskRepeat').value,
     dueDate: document.getElementById('taskDate').value || null,
     dueTime: document.getElementById('taskTime').value || null,
-    notifOffset: Number(document.getElementById('taskNotif').value),
+
     memo: document.getElementById('taskMemo').value.trim(),
   };
 
