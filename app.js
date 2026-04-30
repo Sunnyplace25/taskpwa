@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 96;
+const APP_VERSION = 97;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1787,10 +1787,11 @@ function init() {
       localStorage.setItem('episodeRead', JSON.stringify(episodeRead));
       // 初めて読み終えた＆両方解放済みなら曲解放
       if (!wasRead && isMusicUnlocked(_currentEpisodeKey) && !musicPopupShown[_currentEpisodeKey]) {
-        musicPopupShown[_currentEpisodeKey] = true;
+        const key = _currentEpisodeKey;
+        musicPopupShown[key] = true;
         localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
         renderMusicList();
-        setTimeout(() => showMusicUnlockPopup(_currentEpisodeKey), 400);
+        setTimeout(() => showMusicUnlockPopup(key), 400);
       }
     }
     _currentEpisodeKey = null;
