@@ -123,22 +123,6 @@ body {
   color: #fbbf24;
 }
 
-/* ── Pull-to-refresh indicator ── */
-#ptrIndicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: 0.05em;
-  flex-shrink: 0;
-  transition: height 0.18s ease, opacity 0.18s ease;
-}
-
 /* ── Main ── */
 .main {
   flex: 1;
