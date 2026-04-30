@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 91;
+const APP_VERSION = 92;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1589,7 +1589,6 @@ function init() {
         hint.style.color = '#6366f1';
         checkSweetsUnlock();
         showSpecialUnlockPopup(match.key);
-        if (isMusicUnlocked(match.key)) showMusicUnlockPopup(match.key);
       }
     } else {
       hint.textContent = 'キーワードが違います';
