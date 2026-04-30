@@ -1704,18 +1704,26 @@ function init() {
 
   function showEpisode(info) {
     document.getElementById('episodeViewerName').textContent = info.title;
-    document.getElementById('episodeViewerBody').innerHTML =
+    const body = document.getElementById('episodeViewerBody');
+    body.innerHTML =
       info.text.split('\n').map(l => l ? `<p>${esc(l)}</p>` : '<br>').join('') +
       `<div class="episode-narou-link"><a href="https://mypage.syosetu.com/2212173/" target="_blank" rel="noopener">物語の続きはこちらからも読めます</a></div>`;
     const inner = document.getElementById('episodeViewer').querySelector('.episode-viewer-inner');
     inner.style.backgroundImage = info.bgImg ? `url('${info.bgImg}')` : '';
     document.getElementById('episodeViewer').classList.remove('hidden');
 
-    // 初回開封 & ミュージック解放済みならポップアップ
+    // 読み終わり（最下部スクロール）でミュージック解放
     if (isMusicUnlocked(info.key) && !musicPopupShown[info.key]) {
-      musicPopupShown[info.key] = true;
-      localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
-      setTimeout(() => showMusicUnlockPopup(info.key), 1200);
+      const onScroll = () => {
+        const bottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 40;
+        if (bottom) {
+          inner.removeEventListener('scroll', onScroll);
+          musicPopupShown[info.key] = true;
+          localStorage.setItem('musicPopupShown', JSON.stringify(musicPopupShown));
+          setTimeout(() => showMusicUnlockPopup(info.key), 600);
+        }
+      };
+      inner.addEventListener('scroll', onScroll, { passive: true });
     }
   }
 
