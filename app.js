@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = 89;
+const APP_VERSION = 90;
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
@@ -1140,10 +1140,10 @@ const CHARA_REC = {
   'bg.jpg': {
     img: 'chara_hinata.png',
     items: [
-      { cls: 'rec-narou',  label: '📖 小説を読む', line: 'ここに来て。ちゃんと、待ってる' },
-      { cls: 'rec-insta',  label: '📷 Instagram',  line: '見てて。離れないで' },
-      { cls: 'rec-yt',     label: '▶ YouTube',     line: '声で、覚えてほしい' },
-      { cls: 'rec-kindle', label: '📚 Kindle',     line: 'そばに置いて。消えないから' },
+      { cls: 'rec-narou',  label: '📖 小説を読む', line: 'ここにいる。続き、来ればわかる' },
+      { cls: 'rec-insta',  label: '📷 Instagram',  line: '更新してる。見ててほしい' },
+      { cls: 'rec-yt',     label: '▶ YouTube',     line: '音で残してる。聴いてほしい' },
+      { cls: 'rec-kindle', label: '📚 Kindle',     line: '形にしてある。持っててくれたら嬉しい' },
     ],
   },
   'bg3.jpg': {
