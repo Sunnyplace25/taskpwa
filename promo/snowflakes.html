@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Snow flakes">
+  <meta property="og:description" content="小説 × 音楽 × イラスト — 山吹ことり">
+  <title>Snow flakes | プロジェクト紹介</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --hinata: #93c5fd;
+      --kouta:  #fca5a5;
+      --hayate: #fde68a;
+      --bg:     #0c1220;
+      --text:   #e2e8f0;
+      --muted:  #64748b;
+      --card:   rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif;
+      overflow-x: hidden; line-height: 1.7;
+    }
+    #snow { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4; }
+    section { position: relative; z-index: 1; }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(12,18,32,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--text); }
+    .nav-label { font-size: 12px; letter-spacing: 6px; color: var(--muted); }
+    .nav-app {
+      padding: 8px 22px; border-radius: 100px;
+      background: rgba(147,197,253,0.1); border: 1.5px solid var(--hinata);
+      color: var(--hinata); font-size: 14px; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-app:hover { background: rgba(147,197,253,0.2); }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(147,197,253,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 50%, rgba(252,165,165,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 80%, rgba(253,230,138,0.05) 0%, transparent 55%);
+    }
+    .hero-snowflake { font-size: 52px; margin-bottom: 24px; opacity: 0.9; }
+    .hero-title {
+      font-size: clamp(56px, 10vw, 96px); font-weight: bold; color: white;
+      margin-bottom: 16px; letter-spacing: 4px;
+    }
+    .hero-sub {
+      font-size: clamp(14px, 2vw, 18px); color: var(--muted);
+      letter-spacing: 6px; margin-bottom: 32px;
+    }
+    .hero-tagline {
+      font-size: clamp(16px, 2.5vw, 20px); color: #94a3b8;
+      max-width: 520px; margin: 0 auto 56px; line-height: 1.9;
+    }
+    .genre-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .g-pill {
+      padding: 7px 18px; border-radius: 100px; font-size: 13px;
+      border: 1px solid #1e293b; color: var(--muted);
+      background: rgba(255,255,255,0.03);
+    }
+    .scroll-hint { margin-top: 64px; font-size: 12px; color: #1e293b; letter-spacing: 3px; animation: bounce 2s infinite; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+    /* Section common */
+    .sec-label { display: block; font-size: 11px; letter-spacing: 7px; color: var(--muted); text-align: center; margin-bottom: 12px; }
+    .sec-title { font-size: clamp(26px, 4vw, 36px); font-weight: bold; color: white; text-align: center; margin-bottom: 56px; }
+
+    /* About */
+    .about { padding: 100px 24px; }
+    .about-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; max-width: 900px; margin: 0 auto;
+    }
+    .about-card {
+      padding: 36px 28px; border-radius: 20px;
+      background: var(--card); border: 1px solid var(--border);
+      text-align: center; transition: transform 0.2s;
+    }
+    .about-card:hover { transform: translateY(-4px); }
+    .about-icon { font-size: 36px; margin-bottom: 16px; }
+    .about-name { font-size: 18px; font-weight: bold; color: white; margin-bottom: 8px; }
+    .about-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+    /* Novel */
+    .novel { padding: 100px 24px; background: rgba(255,255,255,0.02); }
+    .novel-inner { max-width: 720px; margin: 0 auto; }
+    .novel-card {
+      padding: 40px; border-radius: 20px;
+      background: var(--card);
+      border: 1px solid rgba(147,197,253,0.2);
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .novel-meta { font-size: 13px; color: var(--muted); letter-spacing: 2px; }
+    .novel-title { font-size: 28px; font-weight: bold; color: white; }
+    .novel-body { font-size: 15px; color: #94a3b8; line-height: 1.9; }
+    .novel-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .n-tag {
+      padding: 5px 14px; border-radius: 100px; font-size: 12px;
+      background: rgba(147,197,253,0.08); border: 1px solid rgba(147,197,253,0.2);
+      color: var(--hinata);
+    }
+    .link-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 100px; font-size: 15px;
+      text-decoration: none; font-weight: bold; transition: opacity 0.2s, transform 0.2s;
+      align-self: flex-start;
+    }
+    .link-btn:hover { opacity: 0.82; transform: translateY(-2px); }
+    .btn-blue { background: rgba(147,197,253,0.15); border: 1.5px solid var(--hinata); color: var(--hinata); }
+
+    /* Music */
+    .music { padding: 100px 24px; }
+    .music-inner { max-width: 900px; margin: 0 auto; }
+    .music-top {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 20px; margin-bottom: 32px;
+    }
+    .music-card {
+      padding: 36px; border-radius: 20px;
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 16px;
+      transition: transform 0.2s;
+    }
+    .music-card:hover { transform: translateY(-3px); }
+    .music-platform { font-size: 12px; letter-spacing: 3px; color: var(--muted); }
+    .music-name { font-size: 20px; font-weight: bold; color: white; }
+    .music-desc { font-size: 14px; color: var(--muted); line-height: 1.8; flex: 1; }
+    .btn-green  { background: rgba(110,231,183,0.12); border: 1.5px solid #6ee7b7; color: #6ee7b7; }
+    .btn-purple { background: rgba(196,181,253,0.12); border: 1.5px solid #c4b5fd; color: #c4b5fd; }
+
+    /* Songs list */
+    .songs { padding: 0 24px 100px; }
+    .songs-inner { max-width: 720px; margin: 0 auto; }
+    .song-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px; border-radius: 12px; margin-bottom: 8px;
+      background: var(--card); border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .song-row:hover { border-color: rgba(255,255,255,0.16); }
+    .song-name { font-size: 16px; color: white; }
+    .song-meta { font-size: 13px; color: var(--muted); }
+
+    /* Characters */
+    .characters { padding: 100px 24px; background: rgba(255,255,255,0.02); }
+    .char-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px; max-width: 900px; margin: 0 auto;
+    }
+    .char-card {
+      border-radius: 20px; overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.08);
+      background: var(--card); transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .char-card:hover { transform: translateY(-6px); }
+    .char-card.h { border-color: rgba(147,197,253,0.35); }
+    .char-card.k { border-color: rgba(252,165,165,0.35); }
+    .char-card.y { border-color: rgba(253,230,138,0.35); }
+    .char-card.h:hover { box-shadow: 0 16px 40px rgba(147,197,253,0.15); }
+    .char-card.k:hover { box-shadow: 0 16px 40px rgba(252,165,165,0.15); }
+    .char-card.y:hover { box-shadow: 0 16px 40px rgba(253,230,138,0.12); }
+    .char-img { width: 100%; aspect-ratio: 3/4; object-fit: contain; display: block; background: rgba(0,0,0,0.2); }
+    .char-info { padding: 20px; }
+    .char-num  { font-size: 11px; letter-spacing: 3px; color: var(--muted); margin-bottom: 6px; }
+    .char-name { font-size: 22px; font-weight: bold; margin-bottom: 4px; }
+    .char-role { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+    .char-desc { font-size: 13px; color: #475569; line-height: 1.7; }
+
+    /* Links */
+    .links { padding: 100px 24px; }
+    .links-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px; max-width: 900px; margin: 0 auto;
+    }
+    .link-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 20px 24px; border-radius: 14px;
+      background: var(--card); border: 1px solid var(--border);
+      text-decoration: none; color: var(--text);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .link-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
+    .link-icon { font-size: 24px; flex-shrink: 0; }
+    .link-info {}
+    .link-name { font-size: 14px; font-weight: bold; color: white; }
+    .link-platform { font-size: 12px; color: var(--muted); }
+
+    /* App CTA */
+    .app-cta {
+      padding: 80px 24px; text-align: center;
+      background: rgba(255,255,255,0.02);
+    }
+    .app-cta p { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
+    .cta {
+      display: inline-block; padding: 18px 52px; border-radius: 100px;
+      background: linear-gradient(135deg, var(--hinata), var(--kouta));
+      color: #0f172a; font-size: 18px; font-weight: bold;
+      text-decoration: none; transition: opacity 0.2s, transform 0.2s;
+    }
+    .cta:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* Footer */
+    .color-bar { height: 5px; display: flex; }
+    .cb1 { flex:1; background: var(--hinata); }
+    .cb2 { flex:1; background: var(--kouta); }
+    .cb3 { flex:1; background: var(--hayate); }
+    footer { padding: 48px 24px 56px; text-align: center; }
+    .footer-brand { font-size: 13px; letter-spacing: 6px; color: #1e293b; margin-bottom: 10px; }
+    .footer-copy  { font-size: 12px; color: #1e293b; }
+
+    @media (max-width: 680px) {
+      nav { padding: 14px 20px; } .nav-label { display: none; }
+      .about-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .music-top  { grid-template-columns: 1fr; }
+      .char-grid  { grid-template-columns: 1fr; max-width: 300px; margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="snow"></canvas>
+
+<nav>
+  <a class="nav-back" href="index.html">← アプリ紹介</a>
+  <span class="nav-label">SNOW FLAKES</span>
+  <a class="nav-app" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-snowflake">❄</div>
+  <h1 class="hero-title">Snow flakes</h1>
+  <p class="hero-sub">Story × Music</p>
+  <p class="hero-catchcopy" style="font-size:clamp(22px,4vw,34px);font-weight:bold;color:white;margin-bottom:20px;line-height:1.6;">音が、そっと距離を変えていく。</p>
+  <p class="hero-tagline">バンド「Snow flakes」の3人を描く。<br>成功譚ではなく、音と人の距離が静かに動いていく物語。</p>
+  <div class="genre-pills">
+    <span class="g-pill">インディーロック</span>
+    <span class="g-pill">シティポップ</span>
+    <span class="g-pill">日本語インディーポップ</span>
+    <span class="g-pill">ヒューマンドラマ</span>
+  </div>
+  <p class="scroll-hint">↓ scroll</p>
+</section>
+
+<!-- About -->
+<section class="about">
+  <span class="sec-label">ABOUT</span>
+  <h2 class="sec-title">Snow flakesとは</h2>
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="about-icon">📖</div>
+      <p class="about-name">小説</p>
+      <p class="about-desc">バンド「Snow flakes」の3人を追うヒューマンドラマ。小説家になろうで連載中。100話以上。</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">🎵</div>
+      <p class="about-name">音楽</p>
+      <p class="about-desc">小説の世界観をもとに制作した楽曲をSunoやSpotifyで公開。物語とリンクした歌詞。</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">🎨</div>
+      <p class="about-name">イラスト</p>
+      <p class="about-desc">キャラクターイラストや背景を制作。アプリ内でも登場する。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Novel -->
+<section class="novel">
+  <span class="sec-label">NOVEL</span>
+  <h2 class="sec-title">小説</h2>
+  <div class="novel-inner">
+    <div class="novel-card">
+      <p class="novel-meta">小説家になろう / ヒューマンドラマ / 連載中</p>
+      <p class="novel-title">Snow flakes</p>
+      <p class="novel-body">
+        ギターボーカルのヒナタ、ベースのコウタ、ドラムのハヤテ。<br>
+        3人がバンドを組んだのは、高校生のころ。<br><br>
+        大きな夢も、ドラマチックな展開もない。<br>
+        ただ音を鳴らして、一緒にいて、少しずつ何かが変わっていく。<br><br>
+        うまくいかない日も、何も言えなかった日も、全部積み上げながら進んでいく物語。<br>
+        高校編・大学編・リトルスノー編・ショーケース編ほか、全100話以上・連載中。
+      </p>
+      <div class="novel-tags">
+        <span class="n-tag">ヒューマンドラマ</span>
+        <span class="n-tag">バンド</span>
+        <span class="n-tag">青春</span>
+        <span class="n-tag">連載中</span>
+      </div>
+      <a class="link-btn btn-blue" href="https://ncode.syosetu.com/n9009lo/" target="_blank">小説を読む →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Music -->
+<section class="music">
+  <span class="sec-label">MUSIC</span>
+  <h2 class="sec-title">音楽</h2>
+  <div class="music-inner">
+    <div class="music-top">
+      <div class="music-card">
+        <p class="music-platform">STREAMING</p>
+        <p class="music-name">各ストリーミングサービスで配信中</p>
+        <p class="music-desc">Spotify・Apple Musicほか各種ストリーミングサービスで楽曲を配信。小説の世界観をもとに制作した楽曲を、いつでも聴ける。</p>
+        <a class="link-btn btn-green" href="https://open.spotify.com/artist/0nOz1pWptKtNtav9yDoQwN" target="_blank">Spotifyで聴く →</a>
+      </div>
+      <div class="music-card">
+        <p class="music-platform">SUNO</p>
+        <p class="music-name">snowflakes_music</p>
+        <p class="music-desc">Sunoでも楽曲を公開中。グラスの縁・呼吸の距離など、ストリーミング未配信の楽曲も聴ける。</p>
+        <a class="link-btn btn-purple" href="https://suno.com/@snowflakes_music" target="_blank">Sunoで聴く →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Songs -->
+<section class="songs">
+  <span class="sec-label" style="text-align:center;display:block;margin-bottom:32px;">TRACKS</span>
+  <div class="songs-inner">
+    <div class="song-row">
+      <span class="song-name">置いた音</span>
+      <span class="song-meta">配信中</span>
+    </div>
+    <div class="song-row">
+      <span class="song-name">Round Bounce</span>
+      <span class="song-meta">配信中</span>
+    </div>
+    <div class="song-row">
+      <span class="song-name">SWEETs</span>
+      <span class="song-meta">配信中</span>
+    </div>
+    <div class="song-row">
+      <span class="song-name">グラスの縁</span>
+      <span class="song-meta">Suno</span>
+    </div>
+    <div class="song-row">
+      <span class="song-name">呼吸の距離</span>
+      <span class="song-meta">Suno</span>
+    </div>
+  </div>
+</section>
+
+<!-- Characters -->
+<section class="characters">
+  <span class="sec-label">CHARACTERS</span>
+  <h2 class="sec-title">登場人物</h2>
+  <div class="char-grid">
+    <div class="char-card h">
+      <img class="char-img" src="../chara_hinata.png" alt="ヒナタ">
+      <div class="char-info">
+        <p class="char-num">01</p>
+        <p class="char-name" style="color:var(--hinata)">ヒナタ</p>
+        <p class="char-role">Guitar &amp; Vocal / 黒髪</p>
+        <p class="char-desc">バンドの主人公。静かで不器用だが、音への真剣さは誰より強い。</p>
+      </div>
+    </div>
+    <div class="char-card k">
+      <img class="char-img" src="../chara_kouta.png" alt="コウタ">
+      <div class="char-info">
+        <p class="char-num">02</p>
+        <p class="char-name" style="color:var(--kouta)">コウタ</p>
+        <p class="char-role">Bass / 赤髪</p>
+        <p class="char-desc">クールで現実的。ベースラインで空気を作る存在。</p>
+      </div>
+    </div>
+    <div class="char-card y">
+      <img class="char-img" src="../chara_hayate.png" alt="ハヤテ">
+      <div class="char-info">
+        <p class="char-num">03</p>
+        <p class="char-name" style="color:var(--hayate)">ハヤテ</p>
+        <p class="char-role">Drums / 金髪</p>
+        <p class="char-desc">明るくてポジティブ。バンドの雰囲気を引っ張る元気の源。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Links -->
+<section class="links">
+  <span class="sec-label">LINKS</span>
+  <h2 class="sec-title">リンク</h2>
+  <div class="links-grid">
+    <a class="link-card" href="https://ncode.syosetu.com/n9009lo/" target="_blank">
+      <span class="link-icon">📖</span>
+      <div class="link-info">
+        <p class="link-name">小説を読む</p>
+        <p class="link-platform">小説家になろう</p>
+      </div>
+    </a>
+    <a class="link-card" href="https://open.spotify.com/artist/0nOz1pWptKtNtav9yDoQwN" target="_blank">
+      <span class="link-icon">🎵</span>
+      <div class="link-info">
+        <p class="link-name">音楽を聴く</p>
+        <p class="link-platform">Spotify</p>
+      </div>
+    </a>
+    <a class="link-card" href="https://suno.com/@snowflakes_music" target="_blank">
+      <span class="link-icon">🎶</span>
+      <div class="link-info">
+        <p class="link-name">音楽を聴く</p>
+        <p class="link-platform">Suno</p>
+      </div>
+    </a>
+    <a class="link-card" href="https://www.instagram.com/snowflakes_story" target="_blank">
+      <span class="link-icon">📸</span>
+      <div class="link-info">
+        <p class="link-name">snowflakes_story</p>
+        <p class="link-platform">Instagram</p>
+      </div>
+    </a>
+    <a class="link-card" href="https://x.com/snowflakes_info" target="_blank">
+      <span class="link-icon">✕</span>
+      <div class="link-info">
+        <p class="link-name">snowflakes_info</p>
+        <p class="link-platform">X（旧Twitter）</p>
+      </div>
+    </a>
+    <a class="link-card" href="https://www.youtube.com/channel/UCL70O3byplFl3nUBMaqSoVw" target="_blank">
+      <span class="link-icon">▶</span>
+      <div class="link-info">
+        <p class="link-name">Snow flakes</p>
+        <p class="link-platform">YouTube</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- App CTA -->
+<section class="app-cta">
+  <p>Snow flakesの世界観をまとったタスク管理アプリも公開中</p>
+  <a class="cta" href="index.html">アプリ紹介を見る →</a>
+</section>
+
+<!-- Footer -->
+<div class="color-bar"><span class="cb1"></span><span class="cb2"></span><span class="cb3"></span></div>
+<footer>
+  <p class="footer-brand">SNOW FLAKES</p>
+  <p class="footer-copy">山吹ことり</p>
+</footer>
+
+<script>
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  const flakes = Array.from({length: 70}, () => ({
+    x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+    r: Math.random()*1.8+0.4, speed: Math.random()*0.5+0.15,
+    drift: (Math.random()-0.5)*0.25
+  }));
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#fff';
+    for (const f of flakes) {
+      ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fill();
+      f.y+=f.speed; f.x+=f.drift;
+      if(f.y>canvas.height+4){f.y=-4;f.x=Math.random()*canvas.width;}
+      if(f.x<-4)f.x=canvas.width+4;
+      if(f.x>canvas.width+4)f.x=-4;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>
