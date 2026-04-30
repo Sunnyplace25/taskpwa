@@ -1796,15 +1796,32 @@ body {
   padding: 18px 20px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   margin-bottom: 32px;
-  max-width: 220px;
+  max-width: 240px;
 }
 
 .greeting-bubble p {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
-  line-height: 1.65;
+  line-height: 1.8;
 }
+
+/* キャラおすすめタグ */
+.rec-tag {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  margin-right: 5px;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+.rec-narou  { background: linear-gradient(135deg, #3b82f6, #6366f1); }
+.rec-insta  { background: linear-gradient(135deg, #833ab4, #fd1d1d); }
+.rec-yt     { background: #c4302b; }
+.rec-kindle { background: #f97316; }
 
 /* ── Praise popup ── */
 .praise-popup {

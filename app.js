@@ -1139,6 +1139,53 @@ function showPopup(msg, duration = 3500) {
   queuePopup(chara.image, msg, duration);
 }
 
+const CHARA_REC = {
+  'bg.jpg': {
+    img: 'chara_hinata.png',
+    items: [
+      { cls: 'rec-narou',  label: '📖 小説を読む', line: '……ここに来て。ちゃんと、待ってる' },
+      { cls: 'rec-insta',  label: '📷 Instagram',  line: '……見てて。離れないで' },
+      { cls: 'rec-yt',     label: '▶ YouTube',     line: '……声で、覚えてほしい' },
+      { cls: 'rec-kindle', label: '📚 Kindle',     line: '……そばに置いて。消えないから' },
+    ],
+  },
+  'bg3.jpg': {
+    img: 'chara_kouta.png',
+    items: [
+      { cls: 'rec-narou',  label: '📖 小説を読む', line: '読め。気づいたら最後までいってる' },
+      { cls: 'rec-insta',  label: '📷 Instagram',  line: 'フォローしとけ。ちゃんと続くから' },
+      { cls: 'rec-yt',     label: '▶ YouTube',     line: '一回聴け。たぶん残る' },
+      { cls: 'rec-kindle', label: '📚 Kindle',     line: '持っとけ。あとで効いてくる' },
+    ],
+  },
+  'bg2.jpg': {
+    img: 'chara_hayate.png',
+    items: [
+      { cls: 'rec-narou',  label: '📖 小説を読む', line: 'ほんとよくて！読んでほしい！' },
+      { cls: 'rec-insta',  label: '📷 Instagram',  line: 'フォローして！絶対楽しいから！' },
+      { cls: 'rec-yt',     label: '▶ YouTube',     line: 'いいから聴いてみて！！' },
+      { cls: 'rec-kindle', label: '📚 Kindle',     line: '本になってんの！すごくない！？' },
+    ],
+  },
+};
+
+function showCharaRec(bg) {
+  if (!bg) {
+    const imgs = ['chara_hinata.png', 'chara_kouta.png', 'chara_hayate.png'];
+    const img = imgs[Math.floor(Math.random() * imgs.length)];
+    setTimeout(() => showOverlay(
+      'チャンネル登録・いいね・感想、<br>全部もらえたら、ちゃんと覚える', img, 5500
+    ), 80);
+    return;
+  }
+  const rec = CHARA_REC[bg];
+  if (!rec) return;
+  const html = rec.items
+    .map(i => `<span class="rec-tag ${i.cls}">${i.label}</span>${i.line}`)
+    .join('<br>');
+  setTimeout(() => showOverlay(html, rec.img, 8000), 80);
+}
+
 const EPISODE_UNLOCK_MSG = {
   hinata: { img: 'chara_hinata.png', msg: '……見つけたんだ。<br>気が向いたら、読んでみて' },
   kouta:  { img: 'chara_kouta.png',  msg: '……まあ、ありがとな。<br>時間あるときでいいから' },
@@ -1314,7 +1361,10 @@ function init() {
 
   // 推しキャラ選択
   document.querySelectorAll('.settings-chara-btn').forEach(btn => {
-    btn.addEventListener('click', () => setFavBg(btn.dataset.bg));
+    btn.addEventListener('click', () => {
+      setFavBg(btn.dataset.bg);
+      showCharaRec(btn.dataset.bg);
+    });
   });
   updateCharaBtns();
 
