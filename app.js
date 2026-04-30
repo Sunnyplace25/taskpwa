@@ -911,7 +911,7 @@ function pgMakeNextCell(typeIdx) {
 function gameReady() {
   // ボードだけリセットしてオーバーレイを表示
   pgBoard = Array.from({length: PG_ROWS}, () => Array(PG_COLS).fill(null));
-  pgScore = 0; pgTimeLeft = 90; pgDead = false; pgLocking = false;
+  pgScore = 0; pgTimeLeft = 90; pgDead = false; pgLocking = false; pgCur = null;
   pgStopTimer();
   pgStopCountdown();
   const timerElR = document.getElementById('pgTimer');
@@ -1295,8 +1295,13 @@ function init() {
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-locked'));
   }
 
+  function isGamePlaying() {
+    return currentView === 'game' && !pgDead && pgCur !== null &&
+      document.getElementById('gameStartOverlay').classList.contains('hidden');
+  }
+
   function navTo(view) {
-    if (currentView === 'game' && !pgDead && view !== 'game') {
+    if (isGamePlaying() && view !== 'game') {
       if (navTapView !== null) {
         // 2回目タップ（どのボタンでも）→ ダイアログ表示
         clearNavLock();
@@ -1332,8 +1337,10 @@ function init() {
   });
   addBtn('leaveCancelBtn', () => {
     closeLeaveDialog();
-    // タイマーを再開
-    if (!pgDead && pgCur) { pgStartTimer(); pgStartCountdown(); bgmPlay(); }
+    // スタート画面でなく実際にゲーム中だったときだけ再開
+    if (!pgDead && pgCur && document.getElementById('gameStartOverlay').classList.contains('hidden')) {
+      pgStartTimer(); pgStartCountdown(); bgmPlay();
+    }
     pendingView = null;
   });
   addBtn('gameResetBtn', gameInit);
