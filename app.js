@@ -1083,6 +1083,7 @@ function renderWeekView() {
 function switchView(view) {
   currentView = view;
   document.querySelector('.main').classList.toggle('game-mode', view === 'game');
+  document.body.style.overflow = view === 'game' ? 'hidden' : '';
   document.getElementById('todayView').classList.toggle('hidden', view !== 'today');
   document.getElementById('weekView').classList.toggle('hidden', view !== 'week');
   document.getElementById('allView').classList.toggle('hidden', view !== 'all');
@@ -1404,7 +1405,7 @@ function init() {
   }
 
   function isGamePlaying() {
-    return currentView === 'game' && !pgDead && pgCur !== null &&
+    return currentView === 'game' && !pgDead &&
       document.getElementById('gameStartOverlay').classList.contains('hidden');
   }
 
