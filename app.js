@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.10';
+const APP_VERSION = '1.11';
 
 // SW更新時に自動リロード
 if ('serviceWorker' in navigator) {
@@ -400,8 +400,8 @@ function bgmToggle() {
 
 // ── Puyo Puyo ────────────────────────────────────────────
 const PG_COLS = 5;
-const PG_ROWS = 10; // row 0,1 は隠れたスポーン行
-const PG_VIS  = 8;  // 表示行数（row 2〜9）
+const PG_ROWS = 10; // row 0 は隠れたスポーン行
+const PG_VIS  = 9;  // 表示行数
 
 const PUYO_PIECES = [
   { key: 'hinata', bg: '#93c5fd', bgGlass: 'rgba(147,197,253,0.22)', img: 'chara_hinata.png' },
@@ -451,7 +451,7 @@ function pgRandType() {
 }
 
 function pgNewPair() {
-  return { main: pgRandType(), sub: pgRandType(), x: 2, y: 2, rot: 0 };
+  return { main: pgRandType(), sub: pgRandType(), x: 2, y: 1, rot: 0 };
 }
 
 function pgSubPos(p) {
@@ -489,7 +489,7 @@ function pgInit() {
 }
 
 function pgSpawn() {
-  pgCur = { ...pgNext, x:2, y:2, rot:0 };
+  pgCur = { ...pgNext, x:2, y:1, rot:0 };
   pgNext = pgNewPair();
   if (!pgCanMove(pgCur)) {
     pgDead = true;
@@ -908,8 +908,8 @@ function pgRender(popping=[]) {
     if (pgInBoard(s.x,s.y))         disp[s.y][s.x]         = pgCur.sub;
   }
 
-  // row 2〜 を描画（row 0,1は非表示）
-  for (let r=2; r<PG_ROWS; r++) {
+  // row 1〜 を描画（row 0は非表示）
+  for (let r=1; r<PG_ROWS; r++) {
     for (let c=0; c<PG_COLS; c++) {
       board.appendChild(pgMakeCell(disp[r][c], poppingSet.has(`${r},${c}`)));
     }

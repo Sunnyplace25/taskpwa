@@ -465,7 +465,7 @@ body {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 72px;
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 8px;
   padding: 8px;
@@ -481,7 +481,7 @@ body {
   min-height: 0;
   min-width: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   overflow: hidden;
   position: relative;
@@ -593,11 +593,13 @@ body {
   grid-row: 1;
   grid-column: 2;
   width: 72px;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 6px;
   padding-top: 4px;
 }
 
@@ -1308,16 +1310,17 @@ body {
   box-shadow: 0 4px 14px rgba(99,102,241,0.35);
 }
 
-/* ゲームボード本体：5列×8行、高さ基準でアスペクト比を維持 */
+/* ゲームボード本体：5列×9行、利用可能領域に収まる最大サイズ */
 .puyo-board {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  grid-template-rows: repeat(9, 1fr);
   gap: 3px;
   padding: 6px;
-  height: 100%;
+  height: auto;
   width: auto;
-  aspect-ratio: 5 / 8;
+  aspect-ratio: 5 / 9;
+  max-height: 100%;
   max-width: 100%;
   background: linear-gradient(160deg, #e0e7ff 0%, #fce7f3 100%);
   border-radius: var(--radius);

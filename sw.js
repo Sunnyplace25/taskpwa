@@ -1,4 +1,4 @@
-const CACHE = 'taskpwa-v19';
+const CACHE = 'taskpwa-v20';
 const ASSETS = ['./style.css', './app.js', './manifest.json', './icon.svg', './icon.png',
   './bg.png', './bg2.png', './bg3.png', './logo.png',
   './chara_hinata.png', './chara_hayate.png', './chara_kouta.png'];
