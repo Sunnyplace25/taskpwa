@@ -1,6 +1,13 @@
 'use strict';
 
-const APP_VERSION = '1.06';
+const APP_VERSION = '1.08';
+
+// SW更新時に自動リロード
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', e => {
+    if (e.data?.type === 'SW_UPDATED') location.reload(true);
+  });
+}
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
