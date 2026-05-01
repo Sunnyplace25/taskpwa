@@ -668,6 +668,7 @@ const GS_KEY_CHARA = [
 ];
 let gsKeyRevealed = JSON.parse(localStorage.getItem('gsKeyRevealed') || '[false,false,false]');
 let gsSnowCount = Number(localStorage.getItem('gsSnowCount') || 0);
+let gsRound = Number(localStorage.getItem('gsRound') || 0);
 
 function getKeyOrder() {
   const first = GS_BG_FIRST[favBg] ?? -1;
@@ -740,22 +741,6 @@ function addSnowCount(n) {
   });
   if (newUnlock) {
     localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
-    // スペシャル背景アンロック（解放時に即切り替え＋ポップアップ）
-    getKeyThresholds().forEach((threshold, rank) => {
-      const keyIdx = order[rank];
-      if (gsKeyRevealed[keyIdx] && !specialBgUnlocked[keyIdx]) {
-        specialBgUnlocked[keyIdx] = true;
-        const kc = GS_KEY_CHARA[keyIdx];
-        const bgImg = SPECIAL_BG_IMGS[keyIdx];
-        setTimeout(() => {
-          currentBg = bgImg;
-          const el = document.getElementById('bgImg');
-          if (el) el.style.backgroundImage = `url('${bgImg}')`;
-          queuePopup(kc.img, `✨ ${kc.bgMsg}`, 4000);
-        }, rank * 300 + 1000);
-      }
-    });
-    localStorage.setItem('specialBgUnlocked', JSON.stringify(specialBgUnlocked));
     // 全鍵解放後、自動リセット
     if (gsKeyRevealed.every(v => v)) {
       setTimeout(() => {
@@ -764,11 +749,27 @@ function addSnowCount(n) {
         queuePopup(kc.img, 'また❄を集めよう！', 3000);
         gsKeyRevealed = [false, false, false];
         gsSnowCount = 0;
+        gsRound++;
+        localStorage.setItem('gsRound', gsRound);
         localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
         localStorage.removeItem('gsSnowCount');
         renderGsKeys();
       }, 4500);
     }
+  }
+  // 2巡目50❄で背景解放
+  if (gsRound >= 1 && gsSnowCount >= 50 && !specialBgUnlocked.every(v => v)) {
+    specialBgUnlocked = [true, true, true];
+    localStorage.setItem('specialBgUnlocked', JSON.stringify(specialBgUnlocked));
+    const bgCharIdx = order[0];
+    const kc = GS_KEY_CHARA[bgCharIdx];
+    const bgImg = SPECIAL_BG_IMGS[bgCharIdx];
+    setTimeout(() => {
+      currentBg = bgImg;
+      const el = document.getElementById('bgImg');
+      if (el) el.style.backgroundImage = `url('${bgImg}')`;
+      queuePopup(kc.img, `✨ ${kc.bgMsg}`, 4000);
+    }, 1000);
   }
   renderGsKeys();
 }
@@ -1566,6 +1567,8 @@ function init() {
     localStorage.removeItem('sweetsUnlocked');
     specialBgUnlocked = [false, false, false];
     localStorage.removeItem('specialBgUnlocked');
+    gsRound = 0;
+    localStorage.removeItem('gsRound');
     setRandomBg();
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
     currentTrack = null;
