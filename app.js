@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.09';
+const APP_VERSION = '1.10';
 
 // SW更新時に自動リロード
 if ('serviceWorker' in navigator) {
@@ -1421,9 +1421,10 @@ function init() {
   }
 
   function navTo(view) {
-    if (isGamePlaying() && view !== 'game') {
+    if (isGamePlaying()) {
+      // ゲーム中はゲームボタン含め全ナビ確認ダイアログ経由
       if (navTapView !== null) {
-        // 2回目タップ（どのボタンでも）→ ダイアログ表示
+        // 2回目タップ → ダイアログ表示
         clearNavLock();
         showLeaveDialog(view);
       } else {
@@ -1454,9 +1455,15 @@ function init() {
   updateCharaBtns();
 
   addBtn('leaveOkBtn', () => {
+    const dest = pendingView;
     closeLeaveDialog();
-    switchView(pendingView);
     pendingView = null;
+    if (dest === 'game') {
+      // ゲームボタン → スタート画面にリセット
+      gameReady();
+    } else {
+      switchView(dest);
+    }
   });
   addBtn('leaveCancelBtn', () => {
     closeLeaveDialog();
