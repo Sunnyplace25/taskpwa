@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.04';
+const APP_VERSION = '1.06';
 
 // ── Storage ──────────────────────────────────────────────
 const STORAGE_KEY = 'taskpwa_tasks';
