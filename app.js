@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.13';
+const APP_VERSION = '1.14';
 
 // SW更新時に自動リロード
 if ('serviceWorker' in navigator) {
@@ -957,12 +957,17 @@ function pgMakeNextCell(typeIdx) {
   return div;
 }
 
-function resizePuyoBoard() {
+function resizePuyoBoard(retry = 0) {
   const wrap = document.querySelector('.game-board-wrap');
   const board = document.getElementById('puyoBoard');
   if (!wrap || !board) return;
   const availW = wrap.clientWidth;
   const availH = wrap.clientHeight;
+  // レイアウト未計算（0）の場合は次フレームで再試行（最大3回）
+  if ((!availW || !availH) && retry < 3) {
+    requestAnimationFrame(() => resizePuyoBoard(retry + 1));
+    return;
+  }
   if (!availW || !availH) return;
   // PG_COLS:PG_VIS のアスペクト比で収まる最大サイズを計算
   let w, h;
@@ -978,7 +983,8 @@ function resizePuyoBoard() {
 }
 
 function gameReady() {
-  resizePuyoBoard();
+  // ビュー表示後のレイアウト確定を待ってからリサイズ
+  requestAnimationFrame(() => resizePuyoBoard());
   // ボードだけリセットしてオーバーレイを表示
   pgBoard = Array.from({length: PG_ROWS}, () => Array(PG_COLS).fill(null));
   pgScore = 0; pgTimeLeft = 90; pgDead = false; pgLocking = false; pgCur = null;
@@ -1417,17 +1423,13 @@ function init() {
     bgmFadeOut(600);
     const overlay = document.getElementById('leaveOverlay');
     overlay.classList.remove('hidden');
-    // ダイアログ表示中はナビ・ゲームボタンをロック
+    // leaveOverlay が全画面を覆うのでナビのみロック
     document.querySelector('.bottom-nav').style.pointerEvents = 'none';
-    document.querySelector('.pg-controls').style.pointerEvents = 'none';
-    document.querySelector('.game-side').style.pointerEvents = 'none';
   }
 
   function closeLeaveDialog() {
     document.getElementById('leaveOverlay').classList.add('hidden');
     document.querySelector('.bottom-nav').style.pointerEvents = '';
-    document.querySelector('.pg-controls').style.pointerEvents = '';
-    document.querySelector('.game-side').style.pointerEvents = '';
   }
 
   function clearNavLock() {
@@ -2125,5 +2127,9 @@ function init() {
 
 document.addEventListener('DOMContentLoaded', init);
 window.addEventListener('resize', () => {
+  if (currentView === 'game') resizePuyoBoard();
+});
+// Android ブラウザバー出現/消滅に対応
+window.visualViewport?.addEventListener('resize', () => {
   if (currentView === 'game') resizePuyoBoard();
 });
