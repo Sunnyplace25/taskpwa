@@ -1306,6 +1306,11 @@ body {
   box-shadow: 0 4px 14px rgba(255,0,0,0.35);
 }
 
+.settings-official {
+  background: linear-gradient(135deg, #a78bfa 0%, #6366f1 100%);
+  box-shadow: 0 4px 14px rgba(167,139,250,0.45);
+}
+
 .settings-narou {
   background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
   box-shadow: 0 4px 14px rgba(99,102,241,0.35);

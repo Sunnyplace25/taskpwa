@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.12';
+const APP_VERSION = '1.13';
 
 // SW更新時に自動リロード
 if ('serviceWorker' in navigator) {
