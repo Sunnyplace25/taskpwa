@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.11';
+const APP_VERSION = '1.12';
 
 // SW更新時に自動リロード
 if ('serviceWorker' in navigator) {
@@ -400,8 +400,8 @@ function bgmToggle() {
 
 // ── Puyo Puyo ────────────────────────────────────────────
 const PG_COLS = 5;
-const PG_ROWS = 10; // row 0 は隠れたスポーン行
-const PG_VIS  = 9;  // 表示行数
+const PG_ROWS = 10;
+const PG_VIS  = 10; // 表示行数（全行表示）
 
 const PUYO_PIECES = [
   { key: 'hinata', bg: '#93c5fd', bgGlass: 'rgba(147,197,253,0.22)', img: 'chara_hinata.png' },
@@ -908,8 +908,8 @@ function pgRender(popping=[]) {
     if (pgInBoard(s.x,s.y))         disp[s.y][s.x]         = pgCur.sub;
   }
 
-  // row 1〜 を描画（row 0は非表示）
-  for (let r=1; r<PG_ROWS; r++) {
+  // row 0〜 を描画（全行表示）
+  for (let r=0; r<PG_ROWS; r++) {
     for (let c=0; c<PG_COLS; c++) {
       board.appendChild(pgMakeCell(disp[r][c], poppingSet.has(`${r},${c}`)));
     }
@@ -957,7 +957,28 @@ function pgMakeNextCell(typeIdx) {
   return div;
 }
 
+function resizePuyoBoard() {
+  const wrap = document.querySelector('.game-board-wrap');
+  const board = document.getElementById('puyoBoard');
+  if (!wrap || !board) return;
+  const availW = wrap.clientWidth;
+  const availH = wrap.clientHeight;
+  if (!availW || !availH) return;
+  // PG_COLS:PG_VIS のアスペクト比で収まる最大サイズを計算
+  let w, h;
+  if (availW * PG_VIS <= availH * PG_COLS) {
+    w = availW;
+    h = Math.floor(w * PG_VIS / PG_COLS);
+  } else {
+    h = availH;
+    w = Math.floor(h * PG_COLS / PG_VIS);
+  }
+  board.style.width  = w + 'px';
+  board.style.height = h + 'px';
+}
+
 function gameReady() {
+  resizePuyoBoard();
   // ボードだけリセットしてオーバーレイを表示
   pgBoard = Array.from({length: PG_ROWS}, () => Array(PG_COLS).fill(null));
   pgScore = 0; pgTimeLeft = 90; pgDead = false; pgLocking = false; pgCur = null;
@@ -2103,3 +2124,6 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('resize', () => {
+  if (currentView === 'game') resizePuyoBoard();
+});
