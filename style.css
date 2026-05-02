@@ -468,9 +468,9 @@ body {
   display: grid;
   grid-template-columns: 1fr 72px;
   grid-template-rows: minmax(0, 1fr) auto;
-  gap: 8px;
-  padding: 8px;
-  padding-bottom: calc(var(--nav-height) + 8px + env(safe-area-inset-bottom, 0px));
+  gap: 4px 8px;
+  padding: 4px 8px;
+  padding-bottom: calc(var(--nav-height) + 4px + env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
 }
 #gameView.hidden { display: none !important; }
@@ -482,7 +482,7 @@ body {
   min-height: 0;
   min-width: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   overflow: hidden;
   position: relative;
@@ -594,13 +594,14 @@ body {
   grid-row: 1;
   grid-column: 2;
   width: 72px;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
   padding-top: 4px;
-  overflow: clip;
+  overflow: hidden;
 }
 
 /* スコア＋タイマー縦並び */
