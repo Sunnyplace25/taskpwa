@@ -600,6 +600,7 @@ body {
   justify-content: flex-start;
   gap: 4px;
   padding-top: 4px;
+  overflow: clip;
 }
 
 /* スコア＋タイマー縦並び */
