@@ -61,6 +61,7 @@ body {
 #app {
   max-width: 480px;
   margin: 0 auto;
+  height: 100vh;
   height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -593,14 +594,13 @@ body {
   grid-row: 1;
   grid-column: 2;
   width: 72px;
-  min-height: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
   padding-top: 4px;
+  overflow: clip;
 }
 
 /* スコア＋タイマー縦並び */
