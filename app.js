@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.15';
+const APP_VERSION = '1.16';
 
 // SW更新時に自動リロード
 if ('serviceWorker' in navigator) {
@@ -983,8 +983,8 @@ function resizePuyoBoard(retry = 0) {
 }
 
 function gameReady() {
-  // ビュー表示後のレイアウト確定を待ってからリサイズ
-  requestAnimationFrame(() => resizePuyoBoard());
+  // 二重rAFでAndroidのレイアウト確定を確実に待つ
+  requestAnimationFrame(() => requestAnimationFrame(() => resizePuyoBoard()));
   // ボードだけリセットしてオーバーレイを表示
   pgBoard = Array.from({length: PG_ROWS}, () => Array(PG_COLS).fill(null));
   pgScore = 0; pgTimeLeft = 90; pgDead = false; pgLocking = false; pgCur = null;
