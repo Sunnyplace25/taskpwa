@@ -463,15 +463,18 @@ body {
   列2(auto) = サイドパネル
 */
 #gameView {
-  flex: 1;
-  min-height: 0;
+  position: fixed;
+  top: var(--header-height);
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
+  left: max(0px, calc((100vw - 480px) / 2));
+  right: max(0px, calc((100vw - 480px) / 2));
   display: grid;
   grid-template-columns: 1fr 72px;
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 4px 8px;
-  padding: 4px 8px;
-  padding-bottom: calc(var(--nav-height) + 4px + env(safe-area-inset-bottom, 0px));
+  padding: 4px 8px 4px;
   box-sizing: border-box;
+  z-index: 5;
 }
 #gameView.hidden { display: none !important; }
 
