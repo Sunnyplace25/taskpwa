@@ -295,7 +295,7 @@
     .color-bar .cb2 { background: var(--kouta); }
     .color-bar .cb3 { background: var(--hayate); }
 
-    /* ── Instagram ── */
+    /* ── YouTube ── */
     .instagram {
       padding: 100px 24px;
       text-align: center;
@@ -305,8 +305,19 @@
       justify-content: center;
       margin-top: 40px;
     }
-    .instagram-wrap blockquote {
+    .yt-short-wrap {
+      position: relative;
+      width: 315px;
+      aspect-ratio: 9/16;
+      border-radius: 16px;
+      overflow: hidden;
       margin: 0 auto;
+    }
+    .yt-short-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
     }
 
     /* ── Footer ── */
@@ -459,28 +470,29 @@
   <a class="cta" href="https://sunnyplace25.github.io/taskpwa/" target="_blank">アプリを開く &rarr;</a>
 </section>
 
-<!-- Instagram -->
+<!-- YouTube -->
 <section class="instagram">
   <div class="sec-head">
-    <span class="sec-label">INSTAGRAM</span>
-    <h2 class="sec-title">Instagram</h2>
+    <span class="sec-label">MOVIE</span>
+    <h2 class="sec-title">YouTube</h2>
   </div>
   <div class="instagram-wrap">
-    <blockquote class="instagram-media"
-      data-instgrm-permalink="https://www.instagram.com/p/DWrd5KACVRZ/"
-      data-instgrm-version="14"
-      style="background:#fff;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);max-width:540px;width:calc(100% - 2px);">
-    </blockquote>
+    <div class="yt-short-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/t3S-aWpjbXM?rel=0&modestbranding=1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
   </div>
   <p style="margin-top:24px;">
-    <a href="https://www.instagram.com/snowflakes_story" target="_blank"
+    <a href="https://www.youtube.com/channel/UCL70O3byplFl3nUBMaqSoVw" target="_blank"
        style="font-size:14px;color:var(--muted);text-decoration:none;transition:color 0.2s;"
        onmouseover="this.style.color='#e2e8f0'" onmouseout="this.style.color='#64748b'">
-      @snowflakes_story →
+      YouTube →
     </a>
   </p>
 </section>
-<script async src="//www.instagram.com/embed.js"></script>
 
 <!-- Footer -->
 <div class="color-bar">
