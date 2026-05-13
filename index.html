@@ -8,13 +8,16 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="タスク">
   <title>タスク管理 | Snow flakes</title>
-  <meta name="description" content="Snow flakes のタスク管理アプリ">
-  <meta property="og:title" content="タスク管理 | Snow flakes">
-  <meta property="og:description" content="Snow flakes のタスク管理アプリ">
-  <meta property="og:image" content="https://sunnyplace25.github.io/taskpwa/icon.png">
+  <meta name="description" content="山吹ことり Snow flakes（スノーフレークス）公式タスク管理アプリ。ヒナタ・コウタ・ハヤテのキャラクターと一緒にタスクを管理しよう。">
+  <meta name="keywords" content="山吹ことり,Snow flakes,スノーフレークス,スノフレ,ヒナタ,コウタ,ハヤテ,タスク管理">
+  <meta property="og:title" content="タスク管理 | Snow flakes | 山吹ことり">
+  <meta property="og:description" content="山吹ことり Snow flakes（スノーフレークス）公式タスク管理アプリ。ヒナタ・コウタ・ハヤテと一緒に。">
+  <meta property="og:image" content="https://sunnyplace25.github.io/taskpwa/kotori.webp">
+  <meta property="og:image:alt" content="山吹ことり Snow flakes スノーフレークス スノフレ">
   <meta property="og:url" content="https://sunnyplace25.github.io/taskpwa/">
   <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sunnyplace25.github.io/taskpwa/kotori.webp">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="favicon-task.svg">
   <link rel="icon" href="icon.png" type="image/png">
@@ -125,15 +128,15 @@
             <p class="settings-section-label">推しキャラ</p>
             <div class="settings-chara-btns">
               <button class="settings-chara-btn" data-bg="bg.jpg" data-name="hinata">
-                <img src="chara_hinata.png" alt="ヒナタ">
+                <img src="chara_hinata.png" alt="Snow flakes ヒナタ 環陽向 ギターボーカル キャラクター 山吹ことり スノーフレークス">
                 <span>ヒナタ</span>
               </button>
               <button class="settings-chara-btn" data-bg="bg3.jpg" data-name="kouta">
-                <img src="chara_kouta.png" alt="コウタ">
+                <img src="chara_kouta.png" alt="Snow flakes コウタ 橘航太 ベース キャラクター 山吹ことり スノーフレークス">
                 <span>コウタ</span>
               </button>
               <button class="settings-chara-btn" data-bg="bg2.jpg" data-name="hayate">
-                <img src="chara_hayate.png" alt="ハヤテ">
+                <img src="chara_hayate.png" alt="Snow flakes ハヤテ 楠木颯 ドラム キャラクター 山吹ことり スノーフレークス">
                 <span>ハヤテ</span>
               </button>
               <button class="settings-chara-btn" data-bg="" data-name="random">
@@ -219,13 +222,13 @@
           <!-- コレクション -->
           <div class="gs-collection">
             <div class="gs-char-slot locked" id="slot-hinata" data-char="hinata" data-img="chara_hinata.png">
-              <img src="chara_hinata.png" class="gs-char-img" alt="ヒナタ">
+              <img src="chara_hinata.png" class="gs-char-img" alt="Snow flakes ヒナタ 環陽向 ギターボーカル 山吹ことり スノーフレークス">
             </div>
             <div class="gs-char-slot locked" id="slot-kouta" data-char="kouta" data-img="chara_kouta.png">
-              <img src="chara_kouta.png" class="gs-char-img" alt="コウタ">
+              <img src="chara_kouta.png" class="gs-char-img" alt="Snow flakes コウタ 橘航太 ベース 山吹ことり スノーフレークス">
             </div>
             <div class="gs-char-slot locked" id="slot-hayate" data-char="hayate" data-img="chara_hayate.png">
-              <img src="chara_hayate.png" class="gs-char-img" alt="ハヤテ">
+              <img src="chara_hayate.png" class="gs-char-img" alt="Snow flakes ハヤテ 楠木颯 ドラム 山吹ことり スノーフレークス">
             </div>
           </div>
           <button class="game-reset-btn" id="gameResetBtn">🔄 Reset</button>
@@ -433,5 +436,12 @@
       navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
     }
   </script>
+  <!-- SEO: author and character images -->
+  <div style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;" aria-hidden="true">
+    <img src="kotori.webp" alt="山吹ことり プロフィール 作家 音楽クリエイター Snow flakes スノーフレークス スノフレ">
+    <img src="chara_hinata.png" alt="Snow flakes スノーフレークス ヒナタ 環陽向 ギターボーカル 山吹ことり">
+    <img src="chara_kouta.png" alt="Snow flakes スノーフレークス コウタ 橘航太 ベース 山吹ことり">
+    <img src="chara_hayate.png" alt="Snow flakes スノーフレークス ハヤテ 楠木颯 ドラム 山吹ことり">
+  </div>
 </body>
 </html>
