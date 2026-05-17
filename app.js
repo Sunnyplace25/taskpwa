@@ -1521,25 +1521,30 @@ function init() {
     { src: 'bg2.jpg', label: 'ハヤテ' },
   ];
   let galleryIdx = 0;
+  let galleryImages = GALLERY_IMAGES; // 現在表示中の画像セット
   let touchStartX = 0;
 
   function galleryShow(idx) {
-    galleryIdx = (idx + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
-    document.getElementById('galleryImg').src = GALLERY_IMAGES[galleryIdx].src;
-    // ドット更新
+    galleryIdx = (idx + galleryImages.length) % galleryImages.length;
+    document.getElementById('galleryImg').src = galleryImages[galleryIdx].src;
+    const showNav = galleryImages.length > 1;
+    document.getElementById('galleryPrev').style.display = showNav ? '' : 'none';
+    document.getElementById('galleryNext').style.display = showNav ? '' : 'none';
     const dots = document.getElementById('galleryDots');
-    dots.innerHTML = GALLERY_IMAGES.map((_, i) =>
+    dots.innerHTML = showNav ? galleryImages.map((_, i) =>
       `<span class="gallery-dot${i === galleryIdx ? ' active' : ''}"></span>`
-    ).join('');
+    ).join('') : '';
   }
 
   function galleryOpen() {
+    galleryImages = GALLERY_IMAGES;
     document.getElementById('galleryOverlay').classList.remove('hidden');
     galleryShow(0);
   }
 
   function galleryClose() {
     document.getElementById('galleryOverlay').classList.add('hidden');
+    galleryImages = GALLERY_IMAGES; // 通常モードに戻す
   }
 
   addBtn('galleryBtn', galleryOpen);
@@ -1551,7 +1556,7 @@ function init() {
   wrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   wrap.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 40) galleryShow(galleryIdx + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 40 && galleryImages.length > 1) galleryShow(galleryIdx + (dx < 0 ? 1 : -1));
   });
 
   // ── スペシャル合言葉 ──────────────────────────────
@@ -1576,11 +1581,17 @@ function init() {
         : `<span class="special-lock">🔒</span><span>${info.name}</span>`;
       if (unlocked) {
         slot.addEventListener('click', () => {
-          document.getElementById('galleryImg').src = info.img;
+          // 解放済みスペシャル写真だけをスワイプ対象にする
+          const specialList = ['hinata','kouta','hayate']
+            .filter(k => specialUnlocked[k])
+            .map(k => {
+              const sp = Object.values(SPECIAL_CODES).find(v => v.key === k);
+              return { src: sp.img, label: sp.name };
+            });
+          galleryImages = specialList.length > 0 ? specialList : [{ src: info.img, label: info.name }];
+          const startIdx = galleryImages.findIndex(img => img.src === info.img);
           document.getElementById('galleryOverlay').classList.remove('hidden');
-          document.getElementById('galleryDots').innerHTML = '';
-          document.getElementById('galleryPrev').style.display = 'none';
-          document.getElementById('galleryNext').style.display = 'none';
+          galleryShow(startIdx >= 0 ? startIdx : 0);
         });
       }
       container.appendChild(slot);
@@ -2048,12 +2059,6 @@ function init() {
   }
 
   renderMusicList();
-
-  // ギャラリーを通常に戻す（スペシャル単体表示から戻る）
-  document.getElementById('galleryClose')?.addEventListener('click', () => {
-    document.getElementById('galleryPrev').style.display = '';
-    document.getElementById('galleryNext').style.display = '';
-  });
 
   // キャラクタープロフィール
   const CHARA_PROFILE = {
