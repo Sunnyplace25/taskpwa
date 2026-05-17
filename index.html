@@ -422,16 +422,20 @@
     </div>
   </div>
 
-  <script src="app.js?v=1.23"></script>
+  <script src="app.js?v=1.24"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(reg => {
+        // 起動時に強制で更新チェック
+        reg.update();
         reg.addEventListener('updatefound', () => {
           const newSW = reg.installing;
           newSW.addEventListener('statechange', () => {
             if (newSW.state === 'activated') location.reload();
           });
         });
+        // 10分ごとに更新チェック
+        setInterval(() => reg.update(), 10 * 60 * 1000);
       });
       navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
     }
