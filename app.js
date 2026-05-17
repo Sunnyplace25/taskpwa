@@ -1007,12 +1007,11 @@ function enterNextRound() {
   const order = getKeyOrder();
   const kc = GS_KEY_CHARA[order[0]];
   const roundNum = gsRound + 1;
-  setTimeout(() => queuePopup(kc.img, `${roundNum}周目スタート！<br>また❄を集めよう`, 4000), 600);
+  queuePopup(kc.img, `${roundNum}周目スタート！<br>また❄を集めよう`, 4000);
 }
 
 function gameStart() {
   document.getElementById('gameStartOverlay').classList.add('hidden');
-  enterNextRound();
   pgGameCount++;
   if (pgGameCount >= 5 && pgGameCount % 5 === 0) {
     const chara = CHARACTERS[currentBg];
@@ -1024,7 +1023,6 @@ function gameStart() {
 
 function gameInit() {
   document.getElementById('gameStartOverlay').classList.add('hidden');
-  enterNextRound();
   pgGameCount++;
   if (pgGameCount >= 5 && pgGameCount % 5 === 0) {
     const chara = CHARACTERS[currentBg];
@@ -1721,6 +1719,10 @@ function init() {
         hint.style.color = '#6366f1';
         checkSweetsUnlock();
         showSpecialUnlockPopup(match.key);
+        // 全鍵解放済みなら画像ポップアップ後に2周目へ
+        if (gsAllRevealed) {
+          setTimeout(() => enterNextRound(), 4200);
+        }
       }
     } else {
       hint.textContent = 'キーワードが違います';
