@@ -221,6 +221,8 @@ function makeCard(task) {
   return div;
 }
 
+let completedCollapsed = localStorage.getItem('completedCollapsed') === '1';
+
 function renderList(listEl, emptyEl, items, completedItems) {
   listEl.innerHTML = '';
   if (items.length === 0 && completedItems.length === 0) {
@@ -238,10 +240,17 @@ function renderList(listEl, emptyEl, items, completedItems) {
   }
   if (completedItems.length > 0) {
     const h = document.createElement('div');
-    h.className = 'section-header';
-    h.textContent = `完了 (${completedItems.length})`;
+    h.className = 'section-header section-header-toggle';
+    h.innerHTML = `<span>${completedCollapsed ? '▶' : '▼'} 完了 (${completedItems.length})</span>`;
+    h.addEventListener('click', () => {
+      completedCollapsed = !completedCollapsed;
+      localStorage.setItem('completedCollapsed', completedCollapsed ? '1' : '0');
+      render();
+    });
     listEl.appendChild(h);
-    completedItems.forEach(t => listEl.appendChild(makeCard(t)));
+    if (!completedCollapsed) {
+      completedItems.forEach(t => listEl.appendChild(makeCard(t)));
+    }
   }
 }
 

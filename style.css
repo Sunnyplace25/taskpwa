@@ -163,6 +163,8 @@ body {
   margin-top: 6px;
 }
 .section-header:first-child { margin-top: 0; }
+.section-header-toggle { cursor: pointer; user-select: none; }
+.section-header-toggle:hover { color: var(--text); }
 
 /* ── Task Card ── */
 .task-card {
