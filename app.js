@@ -676,6 +676,7 @@ const GS_KEY_CHARA = [
 let gsKeyRevealed = JSON.parse(localStorage.getItem('gsKeyRevealed') || '[false,false,false]');
 let gsSnowCount = Number(localStorage.getItem('gsSnowCount') || 0);
 let gsRound = Number(localStorage.getItem('gsRound') || 0);
+let gsAllRevealed = localStorage.getItem('gsAllRevealed') === '1';
 
 function getKeyOrder() {
   const first = GS_BG_FIRST[favBg] ?? -1;
@@ -748,19 +749,14 @@ function addSnowCount(n) {
   });
   if (newUnlock) {
     localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
-    // 全鍵解放後、自動リセット
-    if (gsKeyRevealed.every(v => v)) {
+    // 全鍵解放後 → 即リセットせずフラグをセット。次のゲーム開始時に2周目へ
+    if (gsKeyRevealed.every(v => v) && !gsAllRevealed) {
+      gsAllRevealed = true;
+      localStorage.setItem('gsAllRevealed', '1');
       setTimeout(() => {
         const lastIdx = order[2];
         const kc = GS_KEY_CHARA[lastIdx];
-        queuePopup(kc.img, 'また❄を集めよう！', 3000);
-        gsKeyRevealed = [false, false, false];
-        gsSnowCount = 0;
-        gsRound++;
-        localStorage.setItem('gsRound', gsRound);
-        localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
-        localStorage.removeItem('gsSnowCount');
-        renderGsKeys();
+        queuePopup(kc.img, '全部のキーワードが解放された！<br>次のゲームで2周目へ！', 4000);
       }, 4500);
     }
   }
@@ -997,8 +993,26 @@ function gameReady() {
   document.getElementById('gameStartOverlay').classList.remove('hidden');
 }
 
+function enterNextRound() {
+  if (!gsAllRevealed) return;
+  gsAllRevealed = false;
+  localStorage.removeItem('gsAllRevealed');
+  gsKeyRevealed = [false, false, false];
+  gsSnowCount = 0;
+  gsRound++;
+  localStorage.setItem('gsRound', gsRound);
+  localStorage.setItem('gsKeyRevealed', JSON.stringify(gsKeyRevealed));
+  localStorage.removeItem('gsSnowCount');
+  renderGsKeys();
+  const order = getKeyOrder();
+  const kc = GS_KEY_CHARA[order[0]];
+  const roundNum = gsRound + 1;
+  setTimeout(() => queuePopup(kc.img, `${roundNum}周目スタート！<br>また❄を集めよう`, 4000), 600);
+}
+
 function gameStart() {
   document.getElementById('gameStartOverlay').classList.add('hidden');
+  enterNextRound();
   pgGameCount++;
   if (pgGameCount >= 5 && pgGameCount % 5 === 0) {
     const chara = CHARACTERS[currentBg];
@@ -1010,6 +1024,7 @@ function gameStart() {
 
 function gameInit() {
   document.getElementById('gameStartOverlay').classList.add('hidden');
+  enterNextRound();
   pgGameCount++;
   if (pgGameCount >= 5 && pgGameCount % 5 === 0) {
     const chara = CHARACTERS[currentBg];
